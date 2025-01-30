@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.project.vortex">
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <!-- Main Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- BLE Service -->
+        <service
+            android:name=".BLEService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <!-- Animations -->
+        <activity android:name=".Animations"
+            android:enabled="true"
+            android:exported="false"/>
+
+        <!-- Static Color -->
+        <activity android:name=".StaticColorActivity"
+            android:enabled="true"
+            android:exported="false"/>
+
+        <!-- Select Device -->
+        <activity android:name=".SelectDeviceActivity"
+            android:enabled="true"
+            android:exported="false"/>
+
+        <!--Receiver -->
+        <receiver
+            android:name=".DeviceConnectionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="isDeviceConnected" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>

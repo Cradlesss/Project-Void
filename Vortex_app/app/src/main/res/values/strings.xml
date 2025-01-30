@@ -1,0 +1,78 @@
+<resources>
+
+    <!-- Manifest -->
+    <string name="app_name">Project Void</string>
+
+    <!-- Default Values -->
+    <string name="coming_soon">Coming Soon</string>
+    <!-- Bluetooth -->
+    <string name="updateUIBasedOnConnectionState">Device not connected. Some features are disabled.</string>
+    <string name="handleCommand">Connect To a Device First</string>
+    <string name="bt_not_enabled">Bluetooth is not enabled</string>
+    <string name="no_permissions">Permissions denied. The app may not function properly.</string>
+    <string name="yes_permissions">Permissions granted</string>
+    <string name="bt_permissions_required">Bluetooth permissions are required</string>
+
+    <!-- Device Status -->
+    <string name="discovered">Discovered</string>
+    <string name="paired">Paired</string>
+    <string name="connected">Connected to </string>
+    <string name="disconnected">Disconnected from </string>
+    <string name="connecting">Connecting to </string>
+    <string name="connection_failed">Connection failed</string>
+
+    <!-- Device Scan -->
+    <string name="scan_failed">Scan failed. Please try again.</string>
+    <string name="nothing_found">No devices found</string>
+
+    <!-- Main Activity -->
+    <string name="default_statusText">Connect to a device</string>
+    <string name="scanning_for_devices_statusText">Scanning for devices...</string>
+
+    <!-- Navigation Menu -->
+    <string name="settings">Settings</string>
+    <string name="static_colors">Static Colors</string>
+    <string name="animations">Animations</string>
+    <string name="home">Home</string>
+
+    <!-- Static Color Activity -->
+    <string name="predefined_colors_label">Predefined Colors</string>
+    <string name="custom_color_hex_label">Custom Color (Hex)</string>
+    <string name="apply_color_button">Apply Color</string>
+    <string name="device_icon_desc">Device Icon</string>
+    <string name="saved_colors_long_press_to_save_label">Saved Colors (Long Press to Save)</string>
+    <string name="save_buttons_label">Save</string>
+    <string name="color_saved">Color Saved</string>
+    <string name="invalid_hex_color">Invalid hex color!</string>
+    <string name="color_applied">Color Applied</string>
+    <string name="no_color_saved">No color saved yet!</string>
+
+    <!-- Select Device Activity -->
+    <string name="pair_button_paired">Disconnect</string>
+    <string name="pair_button_unpaired">Pair</string>
+
+    <!-- Device List Item -->
+    <string name="default_device_status">Status: Not Paired</string>
+    <string name="default_device_name">Device Name</string>
+
+    <!-- Animations Activity -->
+    <string name="off_btn">OFF</string>
+    <string name="twinkle_btn">Twinkle</string>
+    <string name="jinx_btn">Jinx</string>
+    <string name="transition_with_break_btn">Transition with Break</string>
+    <string name="blueb_btn">BlueB</string>
+    <string name="rainbow_btn">Rainbow</string>
+    <string name="beatr_btn">BeatR</string>
+    <string name="run_red_btn">Run Red</string>
+    <string name="raw_noise_btn">Raw Noise</string>
+    <string name="moving_rainbow_btn">Moving Rainbow</string>
+    <string name="wave_btn">Wave</string>
+    <string name="blightb_btn">BlightB</string>
+
+    <!-- BLE Service -->
+    <string name="ble_service_running">BLE Service is running...</string>
+    <string name="status_disconnected">Disconnected from </string>
+    <string name="onCreate_BLEService">BLE Service is running...</string>
+    <string name="hashtag_in_EditText">#</string>
+
+</resources>

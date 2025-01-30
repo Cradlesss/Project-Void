@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <!-- ScrollView -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigation"
+        android:padding="16dp">
+
+        <GridLayout
+            android:id="@+id/buttonGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="6"
+            android:alignmentMode="alignMargins"
+            android:useDefaultMargins="true"
+            android:padding="8dp">
+
+            <!-- Buttons -->
+            <Button
+                android:id="@+id/offBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="@string/off_btn"
+                android:textColor="@color/primaryTextColor"
+                android:background="@drawable/rounded_button" />
+
+            <Button
+                android:id="@+id/twinkleBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="@string/twinkle_btn"
+                android:textColor="@color/primaryTextColor"
+                android:background="@drawable/rounded_button" />
+
+            <Button
+                android:id="@+id/jinxBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="@string/jinx_btn"
+                android:textColor="@color/primaryTextColor"
+                android:background="@drawable/rounded_button" />
+
+            <Button
+                android:id="@+id/transitionBreakBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="@string/transition_with_break_btn"
+                android:textColor="@color/primaryTextColor"
+                android:background="@drawable/rounded_button" />
+
+            <Button
+                android:id="@+id/bluebBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="@string/blueb_btn"
+                android:textColor="@color/primaryTextColor"
+                android:background="@drawable/rounded_button" />
+
+            <Button
+                android:id="@+id/rainbowBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="@string/rainbow_btn"
+                android:textColor="@color/primaryTextColor"
+                android:background="@drawable/rounded_button" />
+
+            <Button
+                android:id="@+id/beatrBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="@string/beatr_btn"
+                android:backgroundTint="#700B97"
+                android:textColor="@color/primaryTextColor"
+                android:background="@drawable/rounded_button" />
+
+            <Button
+                android:id="@+id/runredBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="@string/run_red_btn"
+                android:textColor="@color/primaryTextColor"
+                android:background="@drawable/rounded_button" />
+
+            <Button
+                android:id="@+id/rawNoiseBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="@string/raw_noise_btn"
+                android:textColor="@color/primaryTextColor"
+                android:background="@drawable/rounded_button" />
+
+            <Button
+                android:id="@+id/movingRainbowBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="@string/moving_rainbow_btn"
+                android:textColor="@color/primaryTextColor"
+                android:background="@drawable/rounded_button" />
+
+            <Button
+                android:id="@+id/waveBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="@string/wave_btn"
+                android:textColor="@color/primaryTextColor"
+                android:background="@drawable/rounded_button" />
+
+            <Button
+                android:id="@+id/blightbBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:text="@string/blightb_btn"
+                android:textColor="@color/primaryTextColor"
+                android:background="@drawable/rounded_button" />
+        </GridLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/SecondaryColor"
+        app:itemIconTint="@color/AccentColor"
+        app:itemTextColor="@color/primaryTextColor"
+        app:menu="@menu/bottom_navigation_menu" />
+</RelativeLayout>

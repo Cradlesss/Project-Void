@@ -1,0 +1,136 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/headerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Desk LEDs Controller"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/AccentColor"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Status Text -->
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: Not Connected"
+        android:textSize="16sp"
+        android:textColor="@color/primaryTextColor"
+        android:layout_below="@id/headerTitle"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Device Selection Button -->
+    <Button
+        android:id="@+id/selectDeviceBtn"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Select Device"
+        android:textColor="@color/primaryTextColor"
+        android:background="@drawable/rounded_button"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/statusText"
+        android:layout_marginHorizontal="16dp" />
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/selectDeviceBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/AccentColor" />
+
+    <!-- Navigation Buttons -->
+    <Button
+        android:id="@+id/goToAnimations"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Go to Animations"
+        android:textColor="@color/primaryTextColor"
+        android:background="@drawable/rounded_button"
+        android:layout_below="@id/selectDeviceBtn"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp" />
+
+    <Button
+        android:id="@+id/staticColorBtn"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Static Color"
+        android:textColor="@color/primaryTextColor"
+        android:background="@drawable/rounded_button"
+        android:layout_below="@id/goToAnimations"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp" />
+
+    <!-- Disconnect Button -->
+    <Button
+        android:id="@+id/disconnectBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Disconnect"
+        android:textColor="@color/primaryTextColor"
+        android:background="@drawable/rounded_button"
+        android:layout_above="@id/brightnessContainer"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- SeekBar for Brightness -->
+    <LinearLayout
+        android:id="@+id/brightnessContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomNavigation"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_background"
+        android:backgroundTint="@color/SecondaryColor"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:elevation="8dp">
+
+        <TextView
+            android:id="@+id/brightnessLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Brightness"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <SeekBar
+            android:id="@+id/brightnessSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="128"
+            android:valueFrom="48"
+            android:valueTo="60"
+            android:thumbTint="@color/AccentColor"
+            android:progressTint="@color/AccentColor"/>
+    </LinearLayout>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/SecondaryColor"
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_navigation_menu"
+        app:itemIconTint="@color/AccentColor"
+        app:itemTextColor="@color/primaryTextColor" />
+</RelativeLayout>

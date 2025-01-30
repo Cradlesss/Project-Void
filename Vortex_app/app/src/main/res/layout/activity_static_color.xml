@@ -1,0 +1,173 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <!-- Brightness Container -->
+    <LinearLayout
+        android:id="@+id/brightnessContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_background"
+        android:backgroundTint="@color/SecondaryColor"
+        android:padding="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp">
+
+        <!-- Predefined Colors Section -->
+        <TextView
+            android:id="@+id/predefined_colors_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/predefined_colors_label"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/AccentColor"/>
+
+        <GridLayout
+            android:id="@+id/predefined_colors_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:rowCount="2"
+            android:padding="8dp"
+            android:background="@drawable/rounded_background"
+            android:backgroundTint="@color/SecondaryColor">
+
+            <!-- Buttons for predefined colors will be added programmatically -->
+        </GridLayout>
+
+        <!-- Saved Colors Section -->
+        <TextView
+            android:id="@+id/saved_colors_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/saved_colors_long_press_to_save_label"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/AccentColor"
+            android:layout_marginTop="16dp" />
+
+        <GridLayout
+            android:id="@+id/saved_colors_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:rowCount="1"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/saved_color_1"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:background="@drawable/rounded_background"
+                android:hint="@string/save_buttons_label"
+                android:textSize="12sp"
+                android:textColor="@color/secondaryTextColor"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/saved_color_2"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:background="@drawable/rounded_background"
+                android:hint="@string/save_buttons_label"
+                android:textSize="12sp"
+                android:textColor="@color/secondaryTextColor"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/saved_color_3"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:background="@drawable/rounded_background"
+                android:hint="@string/save_buttons_label"
+                android:textSize="12sp"
+                android:textColor="@color/secondaryTextColor"
+                android:gravity="center" />
+        </GridLayout>
+
+        <!-- Custom Hex Input Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="2dp"
+            android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/custom_color_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/custom_color_hex_label"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/AccentColor"
+            android:layout_marginEnd="8dp" />
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/invalid_hex_color"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/errorColor"
+            android:visibility="gone"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/hex_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:background="@drawable/rounded_background"
+            android:padding="12dp"
+            android:inputType="text"
+            android:maxLength="7"
+            android:text="@string/hashtag_in_EditText"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp" />
+
+        <!-- Color Preview -->
+        <View
+            android:id="@+id/color_preview"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_background" />
+
+        <!-- Action Button -->
+        <Button
+            android:id="@+id/apply_color_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/apply_color_button"
+            android:textColor="@color/primaryTextColor"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/rounded_button" />
+    </LinearLayout>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/SecondaryColor"
+        app:itemIconTint="@color/AccentColor"
+        app:itemTextColor="@color/primaryTextColor"
+        app:menu="@menu/bottom_navigation_menu" />
+</RelativeLayout>
