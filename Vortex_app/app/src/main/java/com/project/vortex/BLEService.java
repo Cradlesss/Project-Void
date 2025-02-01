@@ -386,8 +386,8 @@ public class BLEService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
                     CHANNEL_ID,
-                    "BLE Service Channel",
-                    NotificationManager.IMPORTANCE_LOW
+                    "Vortex Service Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
             );
             NotificationManager manager = getSystemService(NotificationManager.class);
             if (manager != null) {
@@ -423,8 +423,8 @@ TODO:
    3. detect when device disconnects and notify user (done)
    4. better UI (done)
    5. selecting static colors not only animations (done)
-   6. Ideas for more features?
-   7. Fix the laggy brightness and make it replay last sent animation or static color after user finished input
+   6. Ideas for more features? ~ react to music?
+   7. Fix the laggy brightness and make it replay last sent animation or static color after user finished input (mostly done needs some minor fixes)
    8. Disconnect button (done)
    9. Update UI, Notification and StatusText when connection crashes (done)
    10. Brightness accidentally sending bluetoothValue commands instead of brightness commands (done)
@@ -436,4 +436,8 @@ TODO:
    16. Fix updating deviceCharFlagMap in other activities (done)
    17. check if app can connect to 2 devices at a time and what happens if yes (make the app disconnect from last connected device) (done)
    18. Fix paired devices in selectDeviceActivity (done)
+   19. add a widget? or full cover screen widget?
+   20. fix notifications with higher api level
+   21. fix jinx and transition with break animations and enable the buttons
+
  */

@@ -172,28 +172,51 @@ public class MainActivity extends AppCompatActivity {
         boolean hasFineLocation = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         boolean hasCoarseLocation = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
-        Log.d("Permissions", "Fine Location: " + hasFineLocation + ", Coarse Location: " + hasCoarseLocation);
+        boolean hasBluetoothConnect = true;
+        boolean hasBluetoothScan = true;
+        boolean hasPostNotifications = true;
 
-        return hasFineLocation || hasCoarseLocation;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            hasBluetoothConnect = ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED;
+            hasBluetoothScan = ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // API 33 (Android 13)
+            hasPostNotifications = ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+        }
+
+        Log.d("Permissions", "Fine Location: " + hasFineLocation +
+                ", Coarse Location: " + hasCoarseLocation +
+                ", Bluetooth Connect: " + hasBluetoothConnect +
+                ", Bluetooth Scan: " + hasBluetoothScan +
+                ", Post Notifications: " + hasPostNotifications);
+
+        return hasFineLocation || hasCoarseLocation || hasBluetoothConnect || hasBluetoothScan || hasPostNotifications;
     }
 
     private void requestPermissions() {
         List<String> permissions = new ArrayList<>();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             permissions.add(Manifest.permission.BLUETOOTH_CONNECT);
             permissions.add(Manifest.permission.BLUETOOTH_SCAN);
-            permissions.add(Manifest.permission.FOREGROUND_SERVICE_LOCATION);
         } else {
             permissions.add(Manifest.permission.BLUETOOTH);
             permissions.add(Manifest.permission.BLUETOOTH_ADMIN);
         }
+
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        permissions.add(Manifest.permission.FOREGROUND_SERVICE);
 
-        ActivityCompat.requestPermissions(this, permissions.toArray(new String[0]), PERMISSION_REQUEST_CODE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
+            permissions.add(Manifest.permission.POST_NOTIFICATIONS);
+        }
+
+        if (!permissions.isEmpty()) {
+            ActivityCompat.requestPermissions(this, permissions.toArray(new String[0]), PERMISSION_REQUEST_CODE);
+        }
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
