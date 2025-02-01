@@ -127,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
                     seekBar.setProgress(lastSentCommand);
                 } else {
                     Log.d(TAG, "Progress stopped");
-                    new Handler().postDelayed(() -> sendBrightness(lastSentCommand), 300);
+                    new Handler().postDelayed(() -> sendBrightness(lastSentCommand), 200);
+                    new Handler().postDelayed(() -> sendBrightness(14), 400);
                 }
 
             }

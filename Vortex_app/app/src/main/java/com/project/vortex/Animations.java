@@ -1,5 +1,6 @@
 package com.project.vortex;
 
+import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,6 +50,11 @@ public class Animations extends AppCompatActivity {
             }
             return false;
         });
+        AnimatorSet animatorSet = new AnimatorSet();
+        if(animatorSet.isRunning()){
+            Log.d(TAG, "AnimatorSet is running");
+            animatorSet.cancel();
+        }
     }
 
     @Override

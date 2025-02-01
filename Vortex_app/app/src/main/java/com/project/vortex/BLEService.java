@@ -19,21 +19,19 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import java.util.UUID;
 
 public class BLEService extends Service {
 
     private static final String TAG = "BLEService";
-    private static final long COMMAND_DELAY = 200; // Xms delay between commands
+    private static final long COMMAND_DELAY = 100; // Xms delay between commands
     private long lastCommandTime = 0;
     private long lastCommand12Time = 0;
-    private static final long COMMAND_12_DELAY = 150; // Xms delay between 12 commands
+    private static final long COMMAND_12_DELAY = 100; // Xms delay between 12 commands
     private static final String CHANNEL_ID = "BLEServiceChannel";
     private static final int NOTIFICATION_ID = 1;
 
@@ -418,7 +416,8 @@ public class BLEService extends Service {
         return Connected;
     }
 }
-/*TODO:
+/*
+TODO:
    1. update the ui when device connected (done) ~ the UI in ActivityMain doesn't update when back from ex animations (might be done (check for further errors)) (done)
    2. notify user when device connected (done)
    3. detect when device disconnects and notify user (done)
@@ -435,5 +434,6 @@ public class BLEService extends Service {
    14. new Icon Design & better app name (Project Void) ~ best one so far, (Project Synthwave) (VortexLink) (Project GhostLink)
    15. buttons can be also set on timeout (to properly send commands) (done)
    16. Fix updating deviceCharFlagMap in other activities (done)
-   17. check if app can connect to 2 devices at a time and what happens if yes
+   17. check if app can connect to 2 devices at a time and what happens if yes (make the app disconnect from last connected device) (done)
+   18. Fix paired devices in selectDeviceActivity (done)
  */

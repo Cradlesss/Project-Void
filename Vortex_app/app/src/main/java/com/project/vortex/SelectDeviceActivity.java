@@ -267,39 +267,54 @@ public class SelectDeviceActivity extends AppCompatActivity {
         if (pairedDevices == null || pairedDevices.isEmpty()) return;
 
         for (BluetoothDevice device : pairedDevices) {
-                Log.d(TAG, "Checking paired device: " + device.getName());
+            String deviceName = device.getName();
+            String deviceAddress = device.getAddress();
 
-                // Connect temporarily to check for characteristic
-                device.connectGatt(this, false, new BluetoothGattCallback() {
-                    @Override
-                    public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-                        if (newState == BluetoothGatt.STATE_CONNECTED) {
-                            Log.d(TAG, "Connected to paired device: " + gatt.getDevice().getName());
-                            gatt.discoverServices();
-                        } else if (newState == BluetoothGatt.STATE_DISCONNECTED) {
-                            Log.d(TAG, "Disconnected from paired device: " + gatt.getDevice().getName());
-                            gatt.close();
-                        }
+            Log.d(TAG, "Checking paired device: " + deviceName + " (" + deviceAddress + ")");
+
+            // Connect temporarily to check for characteristic
+            BluetoothGatt bluetoothGatt = device.connectGatt(this, false, new BluetoothGattCallback() {
+                @Override
+                public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+                    if (newState == BluetoothGatt.STATE_CONNECTED) {
+                        Log.d(TAG, "Connected to paired device: " + gatt.getDevice().getName());
+                        gatt.discoverServices();
+                    } else if (newState == BluetoothGatt.STATE_DISCONNECTED) {
+                        Log.d(TAG, "Disconnected from paired device: " + gatt.getDevice().getName());
+                        gatt.close();
                     }
+                }
 
-                    @Override
-                    public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-                        if (status == BluetoothGatt.GATT_SUCCESS) {
-                            Log.d(TAG, "Services discovered for paired device: " + gatt.getDevice().getName());
+                @Override
+                public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+                    if (status == BluetoothGatt.GATT_SUCCESS) {
+                        Log.d(TAG, "Services discovered for paired device: " + gatt.getDevice().getName());
+
+                        BluetoothGattService service = gatt.getService(SERVICE_UUID); // Expected UUID for compatibility
+
+                        if (service != null) {
+                            Log.d(TAG, "Device " + deviceName + " has required BLE service. Adding to list.");
                             assignIconBasedOnCharacteristic(gatt);
+                            deviceSet.add(deviceAddress);
+                            deviceList.add(device);
+                            deviceStatusMap.put(deviceAddress, "Paired");
                         } else {
-                            Log.e(TAG, "Service discovery failed for paired device: " + gatt.getDevice().getName());
+                            Log.d(TAG, "Device " + deviceName + " does not have required BLE service. Skipping.");
                         }
-                        gatt.disconnect(); // Disconnect after checking
+                    } else {
+                        Log.e(TAG, "Service discovery failed for paired device: " + gatt.getDevice().getName());
                     }
-                });
+                    gatt.disconnect(); // Disconnect after checking
+                }
+            });
 
-                // Add the device to the device list
-                deviceSet.add(device.getAddress());
-                deviceList.add(device);
-                deviceStatusMap.put(device.getAddress(), "Paired");
+            // If the device is incompatible, close the GATT connection immediately
+            if (bluetoothGatt == null) {
+                Log.d(TAG, "Skipping incompatible device: " + deviceName);
+            }
         }
     }
+
 
 
     @SuppressLint("MissingPermission")
@@ -428,6 +443,10 @@ public class SelectDeviceActivity extends AppCompatActivity {
         if(device == null){
             Log.e(TAG, "Device is null");
             return;
+        }
+        if(currentlyConnectedDevice != null){
+            Log.e(TAG, "Already connected to a device disconnecting");
+            disconnectFromDevice(bluetoothAdapter.getRemoteDevice(currentlyConnectedDevice));
         }
         if(device.getAddress() == null){
             Log.e(TAG, "Device address is null");
