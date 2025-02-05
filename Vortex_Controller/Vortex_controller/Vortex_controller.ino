@@ -24,7 +24,7 @@ uint16_t timeVal = 0;
 enum BluetoothCommands {
   OFF = 0,
   TWINKLE = 1,
-  JINX = 2,
+  NEBULA_SURGE = 2,
   TRANSITION_WITH_BREAK = 3,
   BLUEB = 4,
   RAINBOW = 5,
@@ -35,7 +35,8 @@ enum BluetoothCommands {
   WAVE = 10,
   BLIGHTB = 11,
   SET_BRIGHTNESS = 12,
-  SET_STATIC_COLOR = 13
+  SET_STATIC_COLOR = 13,
+  END_BRIGHTNESS_COMMAND = 14
 };
 
 //bt command 
@@ -182,11 +183,11 @@ void loop() {
     case TWINKLE:
       Twinkle();
       break;
-    case JINX:
-      jinx();
+    case NEBULA_SURGE:
+      NebulaSurge();
       break;
     case TRANSITION_WITH_BREAK:
-      Transition_With_Break();
+      TransitionWithBreak();
       break;
     case BLUEB:
       beat();
@@ -457,46 +458,45 @@ void chooseNextColorPalette(CRGBPalette16& pal) {
   pal = *(ActivePaletteList[whichPalette]);
 }
 
-//Transition Jinx (val=='2') ASCII='50'
-void jinx() {
-  for (int i = 0; i < NumLeds; i++) {
-    leds[i] = CRGB(229, 28, 248);
-  }
-  FastLED.show();
-  //delay(500);
-
-  for (int i = NumLeds; i >= 0; i--) {
-    leds[i] = CRGB(12, 23, 79);
-  }
-  FastLED.show();
-  //delay(500);
-}
 //Transition With Break (val=='3') ASCII='51'
-void Transition_With_Break() {
-  for(int i=0;i<=(NumLeds-1);i++)
-  {
-    for(int o=1;o<=(NumLeds-2);o++)
-    {
-    leds[i]=CRGB(0);
-    FastLED.show();
+void TransitionWithBreak() {
+    static int i = 0;
+    static bool forward = true;
+    static unsigned long lastUpdate = 0;
+    const unsigned long interval = 50; // Adjust speed here
+    CRGB backgroundColor = CRGB(93, 58, 147);
+
+    if (millis() - lastUpdate >= interval) {
+        lastUpdate = millis();
+
+        // Clear all LEDs
+        fill_solid(leds, NumLeds, backgroundColor);
+
+        // Ensure the "break" effect (previous LED off)
+        if (forward && i > 0) leds[i - 1] = CRGB(0);
+        if (!forward && i < NumLeds - 1) leds[i + 1] = CRGB(0);
+
+        // Set LED color based on direction
+        leds[i] = forward ? CRGB(127, 1, 247) : CRGB(41, 134, 204);
+        if (!forward && i > 1) leds[i - 1] = CRGB(127, 1, 247);  // Add blue break
+
+        FastLED.show();
+
+        // Move LED position
+        if (forward) {
+            i++;
+            if (i >= NumLeds) {
+                forward = false;
+                i = NumLeds - 1;
+            }
+        } else {
+            i--;
+            if (i < 0) {
+                forward = true;
+                i = 0;
+            }
+        }
     }
-    leds[i]=CRGB(127,1,247);
-    FastLED.show();
-    
-  }
-
-  for(int i=(NumLeds-1);i>=0;i--)
-  {
-    for(int o=(NumLeds-2);o>=1;o--)
-    {
-    leds[i]=CRGB(0);
-    FastLED.show();
-    }
-    leds[i]=CRGB(41,134,204);
-    FastLED.show();
-
-  }
-
 }
 
 //BeatBlue (val=='4') ASCII='52'
@@ -626,4 +626,29 @@ void LEDsArrayOff() {
 void applyStaticColor(){
   fill_solid(leds, NumLeds, CRGB(red,green,blue));
   FastLED.show();
+}
+
+//Transition Jinx (val=='2') ASCII='50'
+void NebulaSurge() {
+    static uint8_t wave = 0;
+    uint8_t brightnessPulse = beatsin8(20, 80, 255); // Slow pulsing brightness effect
+
+    for (int i = 0; i < NumLeds; i++) {
+        uint8_t colorIndex = sin8(wave + (i * 15)); // Creates a wave pattern across LEDs
+        uint8_t colorShift = beatsin8(10, 0, 255);  // Smooth color shifting effect
+        uint8_t flicker = random8(0, 30); // Adds small flickering variation
+
+        // Blend between three colors dynamically over time
+        CRGB color = blend(
+            blend(CRGB(0x8E05C2), CRGB(0x0061B3), sin8(colorIndex + colorShift) / 255.0),
+            CRGB(0x16A085),
+            cos8(colorIndex - colorShift) / 255.0
+        );
+
+        // Apply brightness pulsing and subtle flickering
+        leds[i] = color.nscale8(brightnessPulse - flicker);
+    }
+
+    wave += 2; // Adjusts the speed of the animation
+    FastLED.show();
 }

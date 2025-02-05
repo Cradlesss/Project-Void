@@ -106,8 +106,8 @@ public class Animations extends AppCompatActivity {
     private void setButtonListeners() {
         offButton.setOnClickListener(v -> handleCommand(0));
         twinkleButton.setOnClickListener(v -> handleCommand(1));
-        jinxButton.setOnClickListener(v -> disabledButtons());
-        transitionButton.setOnClickListener(v -> disabledButtons());
+        jinxButton.setOnClickListener(v -> handleCommand(2));
+        transitionButton.setOnClickListener(v -> handleCommand(3));
         bluebButton.setOnClickListener(v -> handleCommand(4));
         rainbowButton.setOnClickListener(v -> handleCommand(5));
         beatrButton.setOnClickListener(v -> handleCommand(6));

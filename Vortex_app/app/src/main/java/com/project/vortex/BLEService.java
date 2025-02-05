@@ -437,7 +437,7 @@ TODO:
    17. check if app can connect to 2 devices at a time and what happens if yes (make the app disconnect from last connected device) (done)
    18. Fix paired devices in selectDeviceActivity (done)
    19. add a widget? or full cover screen widget?
-   20. fix notifications with higher api level
+   20. fix notifications with higher api level (done)
    21. fix jinx and transition with break animations and enable the buttons
 
  */
