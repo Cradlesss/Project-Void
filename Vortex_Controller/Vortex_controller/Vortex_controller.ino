@@ -9,7 +9,7 @@
 //Color order of LED strip
 #define ColorOrder GRB
 //data pin:
-#define DataOut D4 //pin number 6 on Seeed Xiao Sense D3 in code
+#define DataOut D3 //pin number 6 on Seeed Xiao Sense D3 in code
 //LEDs array
 CRGBArray<NumLeds> leds;
 CRGB background[NumLeds];

@@ -11,6 +11,7 @@ public class ConnectedDeviceManager {
     private boolean isConnected;
     private String deviceAddress;
     private Map<String, Boolean> deviceCharFlagMap = new HashMap<>();
+    private Map<String, Boolean> deviceStatusMap = new HashMap<>(); // To track device statuses>
 
     private ConnectedDeviceManager(){}
 
@@ -52,5 +53,17 @@ public class ConnectedDeviceManager {
     public Map<String, Boolean> getDeviceCharFlagMap() {
         Log.d("ConnectedDeviceManager", "getDeviceCharFlagMap called");
         return deviceCharFlagMap;
+    }
+    public void setDeviceStatus(String deviceAddress, boolean status) {
+        Log.d("ConnectedDeviceManager", "setDeviceStatus called with deviceAddress: " + deviceAddress + ", status: " + status);
+        deviceStatusMap.put(deviceAddress, status);
+    }
+    public boolean getDeviceStatus(String deviceAddress) {
+        Log.d("ConnectedDeviceManager", "getDeviceStatus called with deviceAddress: " + deviceAddress);
+        return deviceStatusMap.getOrDefault(deviceAddress, false);
+    }
+    public Map<String, Boolean> getDeviceStatusMap() {
+        Log.d("ConnectedDeviceManager", "getDeviceStatusMap called");
+        return deviceStatusMap;
     }
 }

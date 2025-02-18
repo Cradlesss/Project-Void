@@ -102,7 +102,22 @@ public class PreferencesManager {
     public void clearDevices() {
         sharedPreferences.edit().remove(DEVICES_KEY).apply();
     }
-
+    //Get device Status
+    public String getDeviceStatus(String address) {
+        try {
+            String existingJson = sharedPreferences.getString(DEVICES_KEY, "[]");
+            JSONArray devicesArray = new JSONArray(existingJson);
+            for (int i = 0; i < devicesArray.length(); i++) {
+                JSONObject deviceObject = devicesArray.getJSONObject(i);
+                if (deviceObject.getString("address").equals(address)) {
+                    return deviceObject.optString("status", "Disconnected");
+                }
+                }
+        } catch (JSONException e) {
+            Log.e(TAG, "Error getting device status: " + e.getMessage());
+        }
+        return "Disconnected";
+    }
     // Save the updated devices array
     private void saveDevicesArray(JSONArray devicesArray) {
         sharedPreferences.edit().putString(DEVICES_KEY, devicesArray.toString()).apply();

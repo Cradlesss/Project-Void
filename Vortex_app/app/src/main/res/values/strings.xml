@@ -52,7 +52,7 @@
     <string name="pair_button_unpaired">Pair</string>
 
     <!-- Device List Item -->
-    <string name="default_device_status">Status: Not Paired</string>
+    <string name="default_device_status">Error</string>
     <string name="default_device_name">Device Name</string>
 
     <!-- Animations Activity -->

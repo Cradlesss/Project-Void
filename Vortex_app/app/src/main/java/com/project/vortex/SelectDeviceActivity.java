@@ -65,6 +65,7 @@ public class SelectDeviceActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private Button scanButton, refreshButton;
     private String currentlyConnectedDevice = null;
+    private String selectedDevice = null;
     private Set<String> deviceSet = new HashSet<>();
     //Device
     private List<BluetoothDevice> deviceList = new ArrayList<>();
@@ -202,7 +203,6 @@ public class SelectDeviceActivity extends AppCompatActivity {
             if (device != null && !deviceList.contains(device)) {
                     deviceSet.add(device.getAddress());
                     deviceList.add(device);
-                    deviceStatusMap.put(device.getAddress(), "Discovered");
 
                     // Temporary connection to discover characteristics
                     device.connectGatt(SelectDeviceActivity.this, false, new BluetoothGattCallback() {
@@ -248,15 +248,25 @@ public class SelectDeviceActivity extends AppCompatActivity {
             if (characteristic != null) {
                 Log.d(TAG, "Characteristic found for " + gatt.getDevice().getName());
                 // Assign a custom icon for devices with the characteristic
-                deviceStatusMap.put(deviceAddress, "Disconnected");
                 deviceCharFlagMap.put(deviceAddress, true);
                 ConnectedDeviceManager.getInstance().setDeviceCharFlag(deviceAddress, true);
+                PreferencesManager.getInstance(this).saveDevice(
+                        deviceAddress,
+                        gatt.getDevice().getName(),
+                        true,
+                        "Disconnected"
+                );
             } else {
                 Log.d(TAG, "Characteristic not found for " + gatt.getDevice().getName());
                 // Assign a default icon for devices without the characteristic
-                deviceStatusMap.put(deviceAddress, "Disconnected");
                 deviceCharFlagMap.put(deviceAddress, false);
                 ConnectedDeviceManager.getInstance().setDeviceCharFlag(deviceAddress, false);
+                PreferencesManager.getInstance(this).saveDevice(
+                        deviceAddress,
+                        gatt.getDevice().getName(),
+                        false,
+                        "Disconnected"
+                );
             }
         }
     }
@@ -297,7 +307,6 @@ public class SelectDeviceActivity extends AppCompatActivity {
                             assignIconBasedOnCharacteristic(gatt);
                             deviceSet.add(deviceAddress);
                             deviceList.add(device);
-                            deviceStatusMap.put(deviceAddress, "Paired");
                         } else {
                             Log.d(TAG, "Device " + deviceName + " does not have required BLE service. Skipping.");
                         }
@@ -335,37 +344,47 @@ public class SelectDeviceActivity extends AppCompatActivity {
     private void updateTheUI() {
         // Clear current UI
         deviceContainer.removeAllViews();
-
         // LayoutInflater for dynamically adding views
         LayoutInflater inflater = LayoutInflater.from(this);
 
         // Loop through deviceList to populate UI
         for (BluetoothDevice device : deviceList) {
             View deviceView = inflater.inflate(R.layout.device_list_item, deviceContainer, false);
-
             TextView deviceName = deviceView.findViewById(R.id.device_name);
             TextView deviceStatus = deviceView.findViewById(R.id.device_status);
             Button pairButton = deviceView.findViewById(R.id.pair_button);
             ImageView deviceIcon = deviceView.findViewById(R.id.device_icon);
 
             String address = device.getAddress();
-            String status;
+            String status = PreferencesManager.getInstance(this).getDeviceStatus(address);
+            Log.d("updateTheUI", "Updating UI for device: " + device.getName() + " (" + address + ")" + " currentlyConnectedDevice: " + currentlyConnectedDevice + " isConnected: " + isConnected);
+            deviceStatus.setText(status);
+            deviceName.setText(device.getName());
 
-            Log.d("updateTheUI", "Updating UI for device: " + device.getName() + " (" + address + ")" + " currentlyConnectedDevice: " + currentlyConnectedDevice);
-            if (address.equals(currentlyConnectedDevice)) {
-                status = "Connected";
-                pairButton.setText("Disconnect");
-            } else {
-                status = deviceStatusMap.containsKey(address)
-                        ? deviceStatusMap.get(address)
-                        : "Unknown";
+            if(status.equals("Connecting")){
                 pairButton.setText("Pair");
+                pairButton.setEnabled(false);
+            } else if(status.equals("Connected") || isConnected){
+                pairButton.setText("Disconnect");
+                pairButton.setEnabled(true);
+            } else {
+                pairButton.setText("Pair");
+                pairButton.setEnabled(true);
             }
-            Log.d("updateTheUI", "Device updated: " + device.getName() + " (" + address + ")" + " with status: " + status);
+//            if (address.equals(currentlyConnectedDevice)) {
+//                status = "Connected";
+//                pairButton.setText("Disconnect");
+//                Log.e(TAG, "This is wrong 1");
+//            } else {
+//                status = deviceStatusMap.getOrDefault(address, "Disconnected");
+//                pairButton.setText("Pair");
+//                Log.e(TAG, "This is wrong 2");
+//            }
+            Log.d("updateTheUI", "Device updated: " + device.getName() + " (" + address + ")" + " with status: " + status + " pairButton: " + pairButton.getText());
 
             // Update device name and status
-            deviceName.setText(device.getName());
-            deviceStatus.setText(status);
+//            deviceName.setText(device.getName());
+//            deviceStatus.setText(status);
 
             // Assign icons dynamically
             if (deviceCharFlagMap.containsKey(address) && deviceCharFlagMap.get(address)) {
@@ -453,8 +472,17 @@ public class SelectDeviceActivity extends AppCompatActivity {
             return;
         }
         String address = device.getAddress();
-
         Log.d(TAG, "Connecting to " + device.getName());
+
+        deviceStatusMap.put(device.getAddress(), "Connecting");
+        PreferencesManager.getInstance(this).saveDevice(
+                device.getAddress(),
+                device.getName(),
+                ConnectedDeviceManager.getInstance().getDeviceCharFlag(device.getAddress()),
+                "Connecting"
+        );
+        updateTheUI();
+
         Intent intent = new Intent(this, BLEService.class);
         intent.putExtra("management_BLEService", "CONNECT");
         intent.putExtra("device_address", address);
@@ -463,11 +491,11 @@ public class SelectDeviceActivity extends AppCompatActivity {
         } else {
             startService(intent);
         }
+
         ConnectedDeviceManager.getInstance().setDeviceName(device.getName());
+        ConnectedDeviceManager.getInstance().setDeviceAddress(device.getAddress());
         currentlyConnectedDevice = device.getAddress();
         Log.d(TAG, "currentlyConnectedDevice: " + currentlyConnectedDevice + " " + device.getName());
-        deviceStatusMap.put(device.getAddress(), "Connected");
-        updateTheUI();
     }
 
     private final BroadcastReceiver isDeviceConnectedReceiver = new BroadcastReceiver() {
@@ -475,8 +503,8 @@ public class SelectDeviceActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             boolean isConnected = intent.getBooleanExtra("isConnected", false);
             Log.d(TAG, "Received connection state: " + isConnected);
-            ConnectedDeviceManager.getInstance().setConnected(isConnected);
 
+            ConnectedDeviceManager.getInstance().setConnected(isConnected);
             String address = ConnectedDeviceManager.getInstance().getDeviceAddress();
             Log.d(TAG, "Received address: " + address);
 
@@ -486,13 +514,15 @@ public class SelectDeviceActivity extends AppCompatActivity {
                 PreferencesManager.getInstance(context).saveDevice(
                         address,
                         ConnectedDeviceManager.getInstance().getDeviceName(),
-                        (deviceCharFlagMap.containsKey(address) && deviceCharFlagMap.get(address)), // change
+                        ConnectedDeviceManager.getInstance().getDeviceCharFlag(address),
                         status
                 );
+
                 deviceStatusMap.put(address, status);
                 Log.d(TAG, "deviceStatusMap: " + address + " " + status);
                 currentlyConnectedDevice = isConnected ? address : null;
                 Log.d(TAG, "currentlyConnectedDevice: " + currentlyConnectedDevice + " status " + status);
+                Log.d(TAG, "Updated deviceStatusMap: " + address + " -> " + status);
             }
             updateTheUI();
         }
@@ -520,3 +550,4 @@ public class SelectDeviceActivity extends AppCompatActivity {
         updateTheUI();
     }
 }
+// deviceStatusMap.put(device.getAddress(), "Discovered");
