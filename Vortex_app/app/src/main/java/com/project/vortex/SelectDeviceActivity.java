@@ -26,12 +26,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -352,61 +356,58 @@ public class SelectDeviceActivity extends AppCompatActivity {
             View deviceView = inflater.inflate(R.layout.device_list_item, deviceContainer, false);
             TextView deviceName = deviceView.findViewById(R.id.device_name);
             TextView deviceStatus = deviceView.findViewById(R.id.device_status);
-            Button pairButton = deviceView.findViewById(R.id.pair_button);
+            ImageButton settingsButton = deviceView.findViewById(R.id.settings_button);
             ImageView deviceIcon = deviceView.findViewById(R.id.device_icon);
 
             String address = device.getAddress();
             String status = PreferencesManager.getInstance(this).getDeviceStatus(address);
+            String deviceNameText = PreferencesManager.getInstance(this).getDeviceName(address);
+            if(deviceNameText == null) deviceNameText = device.getName();
+            if(deviceNameText.equals("Unknown")) deviceNameText = device.getName();
             Log.d("updateTheUI", "Updating UI for device: " + device.getName() + " (" + address + ")" + " currentlyConnectedDevice: " + currentlyConnectedDevice + " isConnected: " + isConnected);
             deviceStatus.setText(status);
-            deviceName.setText(device.getName());
-
-            if(status.equals("Connecting")){
-                pairButton.setText("Pair");
-                pairButton.setEnabled(false);
-            } else if(status.equals("Connected") || isConnected){
-                pairButton.setText("Disconnect");
-                pairButton.setEnabled(true);
-            } else {
-                pairButton.setText("Pair");
-                pairButton.setEnabled(true);
-            }
-//            if (address.equals(currentlyConnectedDevice)) {
-//                status = "Connected";
-//                pairButton.setText("Disconnect");
-//                Log.e(TAG, "This is wrong 1");
-//            } else {
-//                status = deviceStatusMap.getOrDefault(address, "Disconnected");
-//                pairButton.setText("Pair");
-//                Log.e(TAG, "This is wrong 2");
-//            }
-            Log.d("updateTheUI", "Device updated: " + device.getName() + " (" + address + ")" + " with status: " + status + " pairButton: " + pairButton.getText());
-
-            // Update device name and status
-//            deviceName.setText(device.getName());
-//            deviceStatus.setText(status);
+            deviceName.setText(deviceNameText);
+            Log.d("updateTheUI", "Device updated: " + device.getName() + " (" + address + ")" + " with status: " + status);
 
             // Assign icons dynamically
             if (deviceCharFlagMap.containsKey(address) && deviceCharFlagMap.get(address)) {
-                deviceIcon.setImageResource(R.drawable.leds_icon);
+                deviceIcon.setImageResource(R.drawable.ic_led_strip);
             } else {
-                deviceIcon.setImageResource(R.drawable.default_bluetooth_device_icon);
+                deviceIcon.setImageResource(R.drawable.ic_device_default);
             }
 
-            // Update button text and action
-            pairButton.setOnClickListener(v -> {
-                if (status.equals("Connected")) {
-                    disconnectFromDevice(device);
-                } else {
-                    Log.d("pairButton", "Connecting to device: " + device.getName());
+            deviceView.setOnClickListener(v -> {
+                if(!status.equals("Connected")){
                     connectToDevice(device);
+                } else {
+                    disconnectFromDevice(device);
                 }
+            });
+
+            //Settings button
+            settingsButton.setOnClickListener(v -> {
+                String settingsDeviceName = PreferencesManager.getInstance(this).getDeviceName(address);
+                if(settingsDeviceName == null) settingsDeviceName = device.getName();
+                Log.d(TAG, "Settings button clicked for device: " + settingsDeviceName + " (" + address + ")");
+                Intent intent = new Intent(SelectDeviceActivity.this, DeviceItemSettings.class);
+                intent.putExtra("deviceName", settingsDeviceName);
+                intent.putExtra("deviceAddress", device.getAddress());
+                deviceSettingsLauncher.launch(intent);
             });
 
             // Add the updated view to the container
             deviceContainer.addView(deviceView);
         }
     }
+    private final ActivityResultLauncher<Intent> deviceSettingsLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == RESULT_OK) {
+                            Log.d(TAG, "Returning from DeviceSettingsActivity - refreshing UI");
+                            loadDiscoveredDevices();
+                            updateTheUI();
+                        }
+                    });
 
     @SuppressLint("MissingPermission")
     private void saveDiscoveredDevices(){
@@ -477,7 +478,7 @@ public class SelectDeviceActivity extends AppCompatActivity {
         deviceStatusMap.put(device.getAddress(), "Connecting");
         PreferencesManager.getInstance(this).saveDevice(
                 device.getAddress(),
-                device.getName(),
+               PreferencesManager.getInstance(this).getDeviceName(device.getAddress()),
                 ConnectedDeviceManager.getInstance().getDeviceCharFlag(device.getAddress()),
                 "Connecting"
         );
@@ -513,7 +514,7 @@ public class SelectDeviceActivity extends AppCompatActivity {
                 Log.d("onReceive", "Saving device: " + address + " with status: " + status);
                 PreferencesManager.getInstance(context).saveDevice(
                         address,
-                        ConnectedDeviceManager.getInstance().getDeviceName(),
+                        PreferencesManager.getInstance(context).getDeviceName(address),
                         ConnectedDeviceManager.getInstance().getDeviceCharFlag(address),
                         status
                 );

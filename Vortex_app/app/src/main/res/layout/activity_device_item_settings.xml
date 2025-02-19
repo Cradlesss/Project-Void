@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundColor"
+    android:padding="16dp">
+
+    <!-- Device Name -->
+    <TextView
+        android:id="@+id/device_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Device Name"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@color/primaryTextColor"
+        android:paddingBottom="8dp"
+        android:gravity="center"
+        android:layout_marginTop="64dp"/>
+
+    <ImageView
+        android:id="@+id/device_icon"
+        android:layout_width="124dp"
+        android:layout_height="124dp"
+        android:layout_below="@+id/device_name_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/device_icon_desc"
+        android:src="@drawable/ic_device_default" />
+
+
+    <!-- Bottom Navigation Actions -->
+    <LinearLayout
+        android:id="@+id/bottom_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <!-- Rename Button -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/rename_device_button">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_edit"
+                app:tint="@color/primaryTextColor"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rename"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <!-- Connect/Disconnect Button -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/connect_disconnect_button">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_bluetooth"
+                app:tint="@color/primaryTextColor"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Connect"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="14sp"
+                android:id="@+id/connect_disconnect_text"/>
+        </LinearLayout>
+
+        <!-- Forget Device Button -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/forget_button">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_unpair"
+                app:tint="@color/errorColor"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forget"
+                android:textColor="@color/errorColor"
+                android:textSize="14sp"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

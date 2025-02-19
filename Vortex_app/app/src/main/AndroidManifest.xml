@@ -53,6 +53,11 @@
             android:enabled="true"
             android:exported="false"/>
 
+        <!-- Device Item Settings -->
+        <activity android:name=".DeviceItemSettings"
+            android:enabled="true"
+            android:exported="false"/>
+
         <!--Receiver -->
         <receiver
             android:name=".DeviceConnectionReceiver"

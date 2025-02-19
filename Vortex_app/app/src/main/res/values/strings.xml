@@ -48,8 +48,6 @@
     <string name="no_color_saved">No color saved yet!</string>
 
     <!-- Select Device Activity -->
-    <string name="pair_button_paired">Disconnect</string>
-    <string name="pair_button_unpaired">Pair</string>
 
     <!-- Device List Item -->
     <string name="default_device_status">Error</string>
@@ -74,5 +72,13 @@
     <string name="status_disconnected">Disconnected from </string>
     <string name="onCreate_BLEService">BLE Service is running...</string>
     <string name="hashtag_in_EditText">#</string>
+
+    <!-- Device Item Settings -->
+    <string name="disconnect_text">Disconnect</string>
+    <string name="forget_device">Forget Device</string>
+    <string name="rename_device">Rename Device</string>
+    <string name="enter_device_name">Enter Device Name</string>
+    <string name="device_name">Device Name</string>
+
 
 </resources>

@@ -3,14 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:onClick="onDeviceClicked">
 
     <!-- Device Icon -->
     <ImageView
         android:id="@+id/device_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/default_bluetooth_device_icon"
+        android:src="@drawable/ic_device_default"
         android:contentDescription="@string/device_icon_desc"
         android:layout_centerVertical="true" />
 
@@ -46,24 +49,29 @@
             android:textColor="@color/primaryTextColor" />
     </LinearLayout>
 
+    <!-- Separator line -->
+    
     <!-- Pair/Disconnect Button -->
-    <Button
-        android:id="@+id/pair_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageButton
+        android:id="@+id/settings_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/rounded_button"
-        android:text="@string/pair_button_unpaired"
-        android:textColor="@color/primaryTextColor"
+        android:src="@drawable/ic_settings"
+        android:background="?android:attr/selectableItemBackground"
+        android:focusable="false"
+        android:clickable="true"
         android:padding="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginEnd="8dp"
+        android:scaleType="fitCenter"/>
+
     <View
         android:id="@+id/bottom_separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/device_icon"
-        android:layout_marginTop="8dp"
-        android:background="@color/SecondaryColor"/>
+        android:layout_marginTop="16dp"
+        android:background="@color/backgroundColor"/>
 </RelativeLayout>

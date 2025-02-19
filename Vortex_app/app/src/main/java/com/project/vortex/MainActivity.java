@@ -274,7 +274,8 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.home);
         LocalBroadcastManager.getInstance(this).registerReceiver(bleStatusReceiver,
                 new IntentFilter("BLEServiceStatusUpdate"));
-        deviceName = ConnectedDeviceManager.getInstance().getDeviceName();
+        deviceName = PreferencesManager.getInstance(this).getDeviceName(ConnectedDeviceManager.getInstance().getDeviceAddress());
+        if(deviceName == null) deviceName = ConnectedDeviceManager.getInstance().getDeviceName();
         isConnected = ConnectedDeviceManager.getInstance().isConnected();
         Log.d(TAG, "ConnectionStateManager isConnected: " + isConnected);
         setUIEnabled(isConnected);

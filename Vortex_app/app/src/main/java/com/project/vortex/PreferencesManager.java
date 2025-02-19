@@ -118,6 +118,61 @@ public class PreferencesManager {
         }
         return "Disconnected";
     }
+
+    public String getDeviceName(String address) {
+        try {
+            String existingJson = sharedPreferences.getString(DEVICES_KEY, "[]");
+            JSONArray devicesArray = new JSONArray(existingJson);
+
+            for (int i = 0; i < devicesArray.length(); i++) {
+                JSONObject deviceObject = devicesArray.getJSONObject(i);
+                if (deviceObject.getString("address").equals(address)) {
+                    return deviceObject.optString("name", "Unknown");
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Error getting device name: " + e.getMessage());
+        }
+        return "Unknown"; // Fallback if device is not found
+    }
+
+    public void setDeviceStatus(String address, String newStatus) {
+        try {
+            String existingJson = sharedPreferences.getString(DEVICES_KEY, "[]");
+            JSONArray devicesArray = new JSONArray(existingJson);
+
+            for (int i = 0; i < devicesArray.length(); i++) {
+                JSONObject deviceObject = devicesArray.getJSONObject(i);
+                if (deviceObject.getString("address").equals(address)) {
+                    deviceObject.put("status", newStatus);
+                    devicesArray.put(i, deviceObject);
+                    saveDevicesArray(devicesArray);
+                    Log.d(TAG, "Device status updated: " + newStatus);
+                    return;
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Error updating device status: " + e.getMessage());
+        }
+
+    }
+
+    public boolean getDeviceCharFlag(String address) {
+        try {
+            String existingJson = sharedPreferences.getString(DEVICES_KEY, "[]");
+            JSONArray devicesArray = new JSONArray(existingJson);
+
+            for (int i = 0; i < devicesArray.length(); i++) {
+                JSONObject deviceObject = devicesArray.getJSONObject(i);
+                if (deviceObject.getString("address").equals(address)) {
+                    return deviceObject.optBoolean("hasCharacteristic", false);
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Error getting device characteristic flag: " + e.getMessage());
+        }
+        return false;
+    }
     // Save the updated devices array
     private void saveDevicesArray(JSONArray devicesArray) {
         sharedPreferences.edit().putString(DEVICES_KEY, devicesArray.toString()).apply();

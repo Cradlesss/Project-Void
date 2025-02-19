@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_background"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rename Device"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/primaryTextColor"
+        android:gravity="center"
+        android:paddingBottom="10dp"/>
+
+    <EditText
+        android:id="@+id/dialog_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter New Name"
+        android:textColorHint="@color/white"
+        android:background="@drawable/rounded_edit_text"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="16sp"
+        android:padding="10dp"
+        android:textAlignment="viewStart"
+        android:gravity="start"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:paddingTop="10dp">
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="@color/AccentColor"
+            android:background="@android:color/transparent"
+            android:padding="10dp"/>
+
+        <Button
+            android:id="@+id/rename_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rename"
+            android:textColor="@color/AccentColor"
+            android:background="@android:color/transparent"
+            android:padding="10dp"/>
+    </LinearLayout>
+</LinearLayout>
