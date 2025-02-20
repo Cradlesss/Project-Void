@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Rename Device"
+        android:text="@string/dialog_rename_title"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/primaryTextColor"
@@ -20,38 +20,43 @@
         android:id="@+id/dialog_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter New Name"
+        android:hint="@string/dialog_rename_editText_default"
         android:textColorHint="@color/white"
         android:background="@drawable/rounded_edit_text"
         android:textColor="@color/primaryTextColor"
         android:textSize="16sp"
         android:padding="10dp"
         android:textAlignment="viewStart"
-        android:gravity="start"/>
+        android:gravity="start"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:singleLine="true"
+        android:imeActionLabel="@string/dialog_rename_positive_button"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="end"
+        android:gravity="center"
         android:paddingTop="10dp">
 
         <Button
             android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/dialog_rename_cancel_button"
             android:textColor="@color/AccentColor"
-            android:background="@android:color/transparent"
+            android:background="@drawable/on_click_button_effect"
+            android:layout_marginEnd="8dp"
             android:padding="10dp"/>
 
         <Button
             android:id="@+id/rename_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rename"
+            android:text="@string/dialog_rename_positive_button"
             android:textColor="@color/AccentColor"
-            android:background="@android:color/transparent"
+            android:background="@drawable/on_click_button_effect"
             android:padding="10dp"/>
     </LinearLayout>
 </LinearLayout>

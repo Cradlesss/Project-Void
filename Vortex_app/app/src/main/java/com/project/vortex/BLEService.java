@@ -88,6 +88,9 @@ public class BLEService extends Service {
             } else if("DRIVER_COMMAND".equals(management) && intent.hasExtra("command")){
                 int command = intent.getIntExtra("command", -1);
                 sendCommand(command);
+            } else if("FORGET".equals(management) && intent.hasExtra("device_address")){
+                String deviceAddress = intent.getStringExtra("device_address");
+                forgetDevice(deviceAddress);
             }
         }
         return START_STICKY;
@@ -107,9 +110,7 @@ public class BLEService extends Service {
             PreferencesManager.getInstance(this).saveDevice(
                     deviceAddress,
                     deviceName,
-                    ConnectedDeviceManager.getInstance().getDeviceCharFlag(
-                            ConnectedDeviceManager.getInstance().getDeviceAddress()
-                    ),
+                    PreferencesManager.getInstance(this).getDeviceCharFlag(deviceAddress),
                     "Disconnected"
             );
             bluetoothGatt.disconnect();
@@ -118,6 +119,7 @@ public class BLEService extends Service {
         }
         Connected = false;
         isDeviceConnected(false);
+        ConnectedDeviceManager.getInstance().setDeviceStatus(deviceAddress, false);
         ConnectedDeviceManager.getInstance().setDeviceAddress(null);
         ConnectedDeviceManager.getInstance().setDeviceName(null);
 
@@ -152,10 +154,11 @@ public class BLEService extends Service {
         if (bluetoothGatt == null) {
             Log.e(TAG, "No active connection found");
             Connected = false;
+            ConnectedDeviceManager.getInstance().setDeviceStatus(deviceAddress,false);
             PreferencesManager.getInstance(this).saveDevice(
                     deviceAddress,
                     PreferencesManager.getInstance(this).getDeviceName(deviceAddress),
-                    ConnectedDeviceManager.getInstance().getDeviceCharFlag(deviceAddress),
+                    PreferencesManager.getInstance(this).getDeviceCharFlag(deviceAddress),
                     "Disconnected"
             );
             isDeviceConnected(false);
@@ -164,10 +167,13 @@ public class BLEService extends Service {
         if(bluetoothGatt != null && bluetoothGatt.getDevice().getAddress().equals(deviceAddress)){
             Log.d(TAG, "Disconnecting from device: " + deviceAddress);
             String deviceName = PreferencesManager.getInstance(this).getDeviceName(deviceAddress);
+            if(deviceName == null) deviceName = bluetoothGatt.getDevice().getName();
+            ConnectedDeviceManager.getInstance().setDeviceStatus(deviceAddress,false);
+            Connected = false;
             PreferencesManager.getInstance(this).saveDevice(
                     deviceAddress,
                     deviceName,
-                    ConnectedDeviceManager.getInstance().getDeviceCharFlag(deviceAddress),
+                    PreferencesManager.getInstance(this).getDeviceCharFlag(deviceAddress),
                     "Disconnected"
             );
             bluetoothGatt.disconnect();
@@ -176,11 +182,42 @@ public class BLEService extends Service {
             Log.d(TAG, "Disconnected from device");
             isDeviceConnected(false);
             ConnectedDeviceManager.getInstance().setDeviceAddress(null);
-            sendStatusUpdate("Disconnected from device");
-            updateNotification("Disconnected from device");
-            Connected = false;
+            sendStatusUpdate("Connect to a device");
+            updateNotification("Connect to a device");
         } else {
             Log.e(TAG, "No active connection found for address " + deviceAddress + bluetoothGatt.getDevice().getName());
+        }
+    }
+    @SuppressLint("MissingPermission")
+    private void forgetDevice(String deviceAddress){
+        if(!hasBluetoothPermission()){
+            Log.e(TAG, "Permission not granted");
+            return;
+        }
+        Log.d(TAG, "Trying to forget device: " + deviceAddress);
+        if(bluetoothGatt == null){
+            Log.e(TAG, "No active connection found");
+            Connected = false;
+            isDeviceConnected(false);
+            ConnectedDeviceManager.getInstance().setDeviceStatus(deviceAddress,false);
+            return;
+        }
+        if(bluetoothGatt != null && bluetoothGatt.getDevice().getAddress().equals(deviceAddress)){
+            Log.d(TAG, "Forgetting device: " + deviceAddress);
+            ConnectedDeviceManager.getInstance().setDeviceStatus(deviceAddress,false);
+            Connected = false;
+            isDeviceConnected(false);
+            ConnectedDeviceManager.getInstance().setDeviceAddress(null);
+            bluetoothGatt.disconnect();
+            bluetoothGatt.close();
+            bluetoothGatt = null;
+            Log.d(TAG, "Device Forgotten");
+            isDeviceConnected(false);
+            ConnectedDeviceManager.getInstance().setDeviceAddress(null);
+            sendStatusUpdate("Connect to a device");
+            updateNotification("Connect to a device");
+        } else {
+            Log.e(TAG, "No active connection found for address " + deviceAddress);
         }
     }
 
@@ -202,10 +239,11 @@ public class BLEService extends Service {
                 Connected = true;
                 ConnectedDeviceManager.getInstance().setDeviceName(device.getName());
                 ConnectedDeviceManager.getInstance().setDeviceAddress(deviceAddress);
+                ConnectedDeviceManager.getInstance().setDeviceStatus(deviceAddress,true);
                 PreferencesManager.getInstance(this).saveDevice(
                         deviceAddress,
                         PreferencesManager.getInstance(this).getDeviceName(deviceAddress),
-                        ConnectedDeviceManager.getInstance().getDeviceCharFlag(deviceAddress),
+                        PreferencesManager.getInstance(this).getDeviceCharFlag(deviceAddress),
                         "Connected"
                 );
                 updateNotification("Connected to " + PreferencesManager.getInstance(this).getDeviceName(deviceAddress));
@@ -218,6 +256,7 @@ public class BLEService extends Service {
                 bluetoothGatt.disconnect();
                 bluetoothGatt.close();
                 bluetoothGatt = null;
+                ConnectedDeviceManager.getInstance().setDeviceStatus(deviceAddress,false);
                 isDeviceConnected(false);
                 ConnectedDeviceManager.getInstance().setDeviceAddress(null);
             }
@@ -241,13 +280,14 @@ public class BLEService extends Service {
                 PreferencesManager.getInstance(this).saveDevice(
                         deviceAddress,
                         PreferencesManager.getInstance(this).getDeviceName(deviceAddress),
-                        ConnectedDeviceManager.getInstance().getDeviceCharFlag(deviceAddress),
+                        PreferencesManager.getInstance(this).getDeviceCharFlag(deviceAddress),
                         "Disconnected"
                 );
                 Log.e(TAG, "Connection timed out");
                 sendStatusUpdate("Connect to a device");
                 updateNotification("Connect to a device");
                 Connected = false;
+                ConnectedDeviceManager.getInstance().setDeviceStatus(deviceAddress,false);
                 isDeviceConnected(false);
                 ConnectedDeviceManager.getInstance().setDeviceAddress(null);
                 ConnectedDeviceManager.getInstance().setDeviceName(null);
@@ -267,10 +307,11 @@ public class BLEService extends Service {
                     gatt.discoverServices();
                     ConnectedDeviceManager.getInstance().setDeviceAddress(gatt.getDevice().getAddress());
                     ConnectedDeviceManager.getInstance().setDeviceName(gatt.getDevice().getName());
+                    ConnectedDeviceManager.getInstance().setDeviceStatus(gatt.getDevice().getAddress(),true);
                     PreferencesManager.getInstance(BLEService.this).saveDevice(
                             gatt.getDevice().getAddress(),
                             PreferencesManager.getInstance(BLEService.this).getDeviceName(gatt.getDevice().getAddress()),
-                            ConnectedDeviceManager.getInstance().getDeviceCharFlag(gatt.getDevice().getAddress()),
+                            PreferencesManager.getInstance(BLEService.this).getDeviceCharFlag(gatt.getDevice().getAddress()),
                             "Connected"
                     );
                     updateNotification("Connected to " + PreferencesManager.getInstance(BLEService.this).getDeviceName(gatt.getDevice().getAddress()));
@@ -279,10 +320,11 @@ public class BLEService extends Service {
                     isDeviceConnected(true);
                 } else if (newState == BluetoothGatt.STATE_DISCONNECTED) {
                     Log.d(TAG, "Disconnected from GATT server");
+                    ConnectedDeviceManager.getInstance().setDeviceStatus(gatt.getDevice().getAddress(),false);
                     PreferencesManager.getInstance(BLEService.this).saveDevice(
                             gatt.getDevice().getAddress(),
                             PreferencesManager.getInstance(BLEService.this).getDeviceName(gatt.getDevice().getAddress()),
-                            ConnectedDeviceManager.getInstance().getDeviceCharFlag(gatt.getDevice().getAddress()),
+                            PreferencesManager.getInstance(BLEService.this).getDeviceCharFlag(gatt.getDevice().getAddress()),
                             "Disconnected"
                     );
                     updateNotification("Disconnected from " + PreferencesManager.getInstance(BLEService.this).getDeviceName(gatt.getDevice().getAddress()));
@@ -296,10 +338,11 @@ public class BLEService extends Service {
                 Connected = false;
                 sendStatusUpdate("Connect to a device");
                 updateNotification("Connect to a device");
+                ConnectedDeviceManager.getInstance().setDeviceStatus(gatt.getDevice().getAddress(),false);
                 PreferencesManager.getInstance(BLEService.this).saveDevice(
                         gatt.getDevice().getAddress(),
                         PreferencesManager.getInstance(BLEService.this).getDeviceName(gatt.getDevice().getAddress()),
-                        ConnectedDeviceManager.getInstance().getDeviceCharFlag(gatt.getDevice().getAddress()),
+                        PreferencesManager.getInstance(BLEService.this).getDeviceCharFlag(gatt.getDevice().getAddress()),
                         "Disconnected"
                 );
                 isDeviceConnected(false);
@@ -473,5 +516,5 @@ TODO:
    20. fix notifications with higher api level (done)
    21. fix jinx and transition with break animations and enable the buttons(done)
    22. fix how the device saving works and check where address is set to null (done probably)
-   23. Add a way or a method to stop the BLEService
+   23. Add a way or a method to stop the BLEService (done)
  */

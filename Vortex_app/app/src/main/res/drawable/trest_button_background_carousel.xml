@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- Fill color for the button background -->
+    <solid android:color="@color/SecondaryColor"/>
+    <!-- Border with desired width and color -->
+    <stroke
+        android:width="2dp"
+        android:color="@color/AccentColor" />
+    <!-- Rounded corners, if desired -->
+    <corners android:radius="8dp"/>
+</shape>

@@ -9,4 +9,18 @@
         <item name="android:backgroundDimAmount">0.8</item> <!-- Dim the background -->
     </style>
 
+    <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/test</item>
+        <item name="android:overlapAnchor">false</item>
+        <item name="android:elevation">10dp</item>
+        <item name="android:itemTextAppearance">@style/PopupMenuTextStyle</item>
+    </style>
+
+    <style name="PopupMenuTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+
 </resources>

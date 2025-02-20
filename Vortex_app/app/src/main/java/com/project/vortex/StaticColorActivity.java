@@ -3,7 +3,9 @@ package com.project.vortex;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -12,22 +14,27 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridLayout;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.skydoves.colorpickerview.ColorEnvelope;
+import com.skydoves.colorpickerview.ColorPickerView;
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
 
 public class StaticColorActivity extends AppCompatActivity {
     private static final String TAG = "StaticColorActivity";
 
     private View colorPreview;
     private Button savedColor1, savedColor2, savedColor3;
-    private GridLayout predefinedColorsGrid;
     private Button applyColorButton;
+    private ImageButton backButton;
+    private FrameLayout backButtonFrame;
     private EditText hexInput;
+    private ColorPickerView colorPickerView;
+    private TextView rValue, gValue, bValue;
     private boolean isConnected = false;
 
     @Override
@@ -38,14 +45,19 @@ public class StaticColorActivity extends AppCompatActivity {
         Log.d(TAG, "Initial connection status: " + isConnected);
 
         colorPreview = findViewById(R.id.color_preview);
-        predefinedColorsGrid = findViewById(R.id.predefined_colors_grid);
         applyColorButton = findViewById(R.id.apply_color_button);
         savedColor1 = findViewById(R.id.saved_color_1);
         savedColor2 = findViewById(R.id.saved_color_2);
         savedColor3 = findViewById(R.id.saved_color_3);
         hexInput = findViewById(R.id.hex_input);
+        backButton = findViewById(R.id.back_button);
+        backButtonFrame = findViewById(R.id.back_button_frame);
+        colorPickerView = findViewById(R.id.colorPickerView);
+        rValue = findViewById(R.id.r_value);
+        gValue = findViewById(R.id.g_value);
+        bValue = findViewById(R.id.b_value);
 
-        setupPredefinedColors();
+        setupColorWheel();
         setupHexInputWatcher();
 
         // Load saved colors
@@ -61,6 +73,26 @@ public class StaticColorActivity extends AppCompatActivity {
         savedColor1.setOnClickListener(v -> applySavedColor(savedColor1));
         savedColor2.setOnClickListener(v -> applySavedColor(savedColor2));
         savedColor3.setOnClickListener(v -> applySavedColor(savedColor3));
+
+        // Back Button Listener
+        View.OnClickListener sharedBackListener = v -> {
+            Log.d(TAG, "Back button clicked");
+            int centerX = backButtonFrame.getWidth() / 2;
+            int centerY = backButtonFrame.getHeight() / 2;
+
+            backButtonFrame.setPressed(true);
+            Drawable foreground = backButtonFrame.getForeground();
+            if(foreground instanceof RippleDrawable){
+                (foreground).setHotspot(centerX, centerY);
+            }
+
+            backButtonFrame.postDelayed(() -> {
+                backButtonFrame.setPressed(false);
+                finish();
+            }, 200);
+        };
+        backButton.setOnClickListener(sharedBackListener);
+        backButtonFrame.setOnClickListener(sharedBackListener);
 
         // Bottom Navigation Setup
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
@@ -99,27 +131,25 @@ public class StaticColorActivity extends AppCompatActivity {
         }
     }
 
-    private void setupPredefinedColors() {
-        String[][] predefinedColors = {
-                {"Red", "#FF0000"},
-                {"Green", "#00FF00"},
-                {"Blue", "#0000FF"},
-                {"White", "#FFFFFF"},
-                {"Yellow", "#FFFF00"},
-                {"Cyan", "#00FFFF"},
-        };
+    private void setupColorWheel(){
+        colorPickerView.setColorListener(new ColorEnvelopeListener() {
+            @Override
+            public void onColorSelected(ColorEnvelope colorEnvelope, boolean fromUser) {
+                int selectedColor = colorEnvelope.getColor();
+                int r = Color.red(selectedColor);
+                int g = Color.green(selectedColor);
+                int b = Color.blue(selectedColor);
 
-        for (String[] color : predefinedColors) {
-            Button colorButton = new Button(this);
-            colorButton.setText("");
-            colorButton.setBackgroundColor(Color.parseColor(color[1]));
-            colorButton.setLayoutParams(new GridLayout.LayoutParams());
-            colorButton.setOnClickListener(v -> {
-                hexInput.setText(color[1]);
-                updateColorPreview(color[1]);
-            });
-            predefinedColorsGrid.addView(colorButton);
-        }
+                rValue.setText("R: " + r);
+                gValue.setText("G: " + g);
+                bValue.setText("B: " + b);
+
+                String hexColor = String.format("#%06X", (0xFFFFFF & selectedColor));
+
+                hexInput.setText(hexColor);
+                updateColorPreview(hexColor);
+            }
+        });
     }
 
     private void setupHexInputWatcher() {

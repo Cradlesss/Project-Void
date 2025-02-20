@@ -6,12 +6,48 @@
     android:background="@color/backgroundColor"
     android:padding="16dp">
 
+    <!-- Device Settings Tile -->
+    <TextView
+        android:id="@+id/device_settings_tile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/device_settings_tile"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/AccentColor"
+        android:textAlignment="center"
+        android:paddingTop="5dp"
+        android:layout_toEndOf="@+id/back_button_frame"
+        android:layout_alignTop="@id/back_button_frame"
+        android:layout_alignBottom="@id/back_button_frame"/>
+
+    <!-- Back Button -->
+    <FrameLayout
+        android:id="@+id/back_button_frame"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/on_click_button_effect"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="8dp"
+        android:layout_gravity="center">
+
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_go_back"
+            android:contentDescription="@string/device_icon_desc"/>
+    </FrameLayout>
+
     <!-- Device Name -->
     <TextView
         android:id="@+id/device_name_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Device Name"
+        android:text="@string/device_name_Title"
         android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="@color/primaryTextColor"
@@ -60,7 +96,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rename"
+                android:text="@string/rename_button"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="14sp"/>
         </LinearLayout>
@@ -85,7 +121,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Connect"
+                android:text="@string/connect_button"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="14sp"
                 android:id="@+id/connect_disconnect_text"/>
@@ -111,7 +147,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Forget"
+                android:text="@string/forget_button"
                 android:textColor="@color/errorColor"
                 android:textSize="14sp"/>
         </LinearLayout>

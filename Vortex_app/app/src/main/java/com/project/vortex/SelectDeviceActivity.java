@@ -18,33 +18,37 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ParcelUuid;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -67,9 +71,10 @@ public class SelectDeviceActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private LinearLayout deviceContainer;
     private BottomNavigationView bottomNavigationView;
-    private Button scanButton, refreshButton;
+    private Button scanButton;
+    private ImageButton burgerMenuButton, backButton;
+    private FrameLayout backButtonFrame, burgerMenuButtonFrame;
     private String currentlyConnectedDevice = null;
-    private String selectedDevice = null;
     private Set<String> deviceSet = new HashSet<>();
     //Device
     private List<BluetoothDevice> deviceList = new ArrayList<>();
@@ -86,14 +91,54 @@ public class SelectDeviceActivity extends AppCompatActivity {
         deviceContainer = findViewById(R.id.device_container);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         scanButton = findViewById(R.id.scan_button);
-        refreshButton = findViewById(R.id.refresh_button);
+        burgerMenuButton = findViewById(R.id.burger_menu_button);
+        backButton = findViewById(R.id.back_button);
+        backButtonFrame = findViewById(R.id.back_button_frame);
+        burgerMenuButtonFrame = findViewById(R.id.burger_menu_button_frame);
 
         bluetoothAdapter = ((android.bluetooth.BluetoothManager) getSystemService(BLUETOOTH_SERVICE)).getAdapter();
         bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
 
         loadDiscoveredDevices();
 
-        refreshButton.setOnClickListener(v -> refreshDeviceList());
+        View.OnClickListener sharedBackListener = v -> {
+            Log.d(TAG, "Back button clicked");
+            int centerX = backButtonFrame.getWidth() / 2;
+            int centerY = backButtonFrame.getHeight() / 2;
+
+            backButtonFrame.setPressed(true);
+            Drawable foreground = backButtonFrame.getForeground();
+            if(foreground instanceof RippleDrawable){
+                (foreground).setHotspot(centerX, centerY);
+            }
+
+            backButtonFrame.postDelayed(() -> {
+                backButtonFrame.setPressed(false);
+                finish();
+            }, 200);
+        };
+
+        View.OnClickListener sharedBurgerMenuListener = v -> {
+            Log.d(TAG, "Burger menu button clicked");
+            int centerX = burgerMenuButtonFrame.getWidth() / 2;
+            int centerY = burgerMenuButtonFrame.getHeight() / 2;
+
+            burgerMenuButtonFrame.setPressed(true);
+            Drawable foreground = burgerMenuButtonFrame.getForeground();
+            if(foreground instanceof RippleDrawable){
+                (foreground).setHotspot(centerX, centerY);
+            }
+
+            burgerMenuButtonFrame.postDelayed(() -> {
+                burgerMenuButtonFrame.setPressed(false);
+            }, 200);
+            popupMenu();
+        };
+
+        burgerMenuButton.setOnClickListener(sharedBurgerMenuListener);
+        burgerMenuButtonFrame.setOnClickListener(sharedBurgerMenuListener);
+        backButton.setOnClickListener(sharedBackListener);
+        backButtonFrame.setOnClickListener(sharedBackListener);
 
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
             Toast.makeText(this, R.string.bt_not_enabled, Toast.LENGTH_SHORT).show();
@@ -122,6 +167,29 @@ public class SelectDeviceActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    private void popupMenu(){
+        PopupMenu popupMenu = new PopupMenu(SelectDeviceActivity.this, burgerMenuButton, Gravity.END, 0, R.style.PopupMenuStyle);
+        popupMenu.getMenuInflater().inflate(R.menu.burger_menu_popup, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.refresh_device_list) {
+                refreshDeviceList();
+                return true;
+            } else if (itemId == R.id.menu_advanced_settings) {
+                Toast.makeText(SelectDeviceActivity.this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
+            }
+            return false;
+        });
+        popupMenu.show();
+        for(int i = 0; i < popupMenu.getMenu().size(); i++){
+            MenuItem menuItem = popupMenu.getMenu().getItem(i);
+            SpannableString s = new SpannableString(menuItem.getTitle());
+            s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(SelectDeviceActivity.this, R.color.primaryTextColor)),
+                    0,s.length(),0);
+            menuItem.setTitle(s);
+        }
     }
     @Override
     protected void onResume() {
@@ -377,11 +445,16 @@ public class SelectDeviceActivity extends AppCompatActivity {
             }
 
             deviceView.setOnClickListener(v -> {
-                if(!status.equals("Connected")){
-                    connectToDevice(device);
-                } else {
-                    disconnectFromDevice(device);
-                }
+                v.setPressed(true);
+
+                v.postDelayed(() -> {
+                    v.setPressed(false);
+                    if (!status.equals("Connected")) {
+                        connectToDevice(device);
+                    } else {
+                        disconnectFromDevice(device);
+                    }
+                },200);
             });
 
             //Settings button
@@ -400,14 +473,13 @@ public class SelectDeviceActivity extends AppCompatActivity {
         }
     }
     private final ActivityResultLauncher<Intent> deviceSettingsLauncher =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                    result -> {
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                         if (result.getResultCode() == RESULT_OK) {
                             Log.d(TAG, "Returning from DeviceSettingsActivity - refreshing UI");
                             loadDiscoveredDevices();
                             updateTheUI();
                         }
-                    });
+            });
 
     @SuppressLint("MissingPermission")
     private void saveDiscoveredDevices(){
@@ -422,6 +494,8 @@ public class SelectDeviceActivity extends AppCompatActivity {
         }
     }
     private void loadDiscoveredDevices(){
+
+        deviceList.clear();
         Log.d(TAG, "Loading discovered devices");
         List<JSONObject> savedDevices = PreferencesManager.getInstance(this).loadDevices();
 
@@ -479,7 +553,7 @@ public class SelectDeviceActivity extends AppCompatActivity {
         PreferencesManager.getInstance(this).saveDevice(
                 device.getAddress(),
                PreferencesManager.getInstance(this).getDeviceName(device.getAddress()),
-                ConnectedDeviceManager.getInstance().getDeviceCharFlag(device.getAddress()),
+                PreferencesManager.getInstance(this).getDeviceCharFlag(device.getAddress()),
                 "Connecting"
         );
         updateTheUI();
@@ -505,17 +579,20 @@ public class SelectDeviceActivity extends AppCompatActivity {
             boolean isConnected = intent.getBooleanExtra("isConnected", false);
             Log.d(TAG, "Received connection state: " + isConnected);
 
-            ConnectedDeviceManager.getInstance().setConnected(isConnected);
+
             String address = ConnectedDeviceManager.getInstance().getDeviceAddress();
+            ConnectedDeviceManager.getInstance().setConnected(isConnected);
+            boolean accurateDeviceStatus = ConnectedDeviceManager.getInstance().getDeviceStatus(address);
             Log.d(TAG, "Received address: " + address);
+            Log.d(TAG, "Received connection state: " + ConnectedDeviceManager.getInstance().getDeviceStatus(address));
 
             if(address != null){
-                String status = isConnected ? "Connected" : "Disconnected";
+                String status = accurateDeviceStatus ? "Connected" : "Disconnected";
                 Log.d("onReceive", "Saving device: " + address + " with status: " + status);
                 PreferencesManager.getInstance(context).saveDevice(
                         address,
                         PreferencesManager.getInstance(context).getDeviceName(address),
-                        ConnectedDeviceManager.getInstance().getDeviceCharFlag(address),
+                        PreferencesManager.getInstance(context).getDeviceCharFlag(address),
                         status
                 );
 
@@ -551,4 +628,3 @@ public class SelectDeviceActivity extends AppCompatActivity {
         updateTheUI();
     }
 }
-// deviceStatusMap.put(device.getAddress(), "Discovered");

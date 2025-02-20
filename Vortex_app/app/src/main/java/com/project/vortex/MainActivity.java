@@ -15,14 +15,11 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,13 +30,12 @@ public class MainActivity extends AppCompatActivity {
     // BLE
     private BluetoothAdapter bluetoothAdapter;
     // UI
-    private Button selectDeviceButton, openAnimationsButton, disconnectButton, staticColorButton;
+    private Button selectDeviceButton, openAnimationsButton, staticColorButton;
     private TextView statusText;
     private SeekBar brightnessSeekBar;
     private BottomNavigationView bottomNavigationView;
     private String status;
     private String deviceName;
-
     private static final int PERMISSION_REQUEST_CODE = 100;
     private boolean isConnected = false;
     //seek bar stuff
@@ -92,8 +88,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
-        //disconnect button
-        disconnectButton.setOnClickListener(v -> disconnectDevice());
+
         //brightnessSeekBar
         brightnessSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -158,12 +153,10 @@ public class MainActivity extends AppCompatActivity {
         selectDeviceButton = findViewById(R.id.selectDeviceBtn);
         openAnimationsButton = findViewById(R.id.goToAnimations);
         brightnessSeekBar = findViewById(R.id.brightnessSeekBar);
-        disconnectButton = findViewById(R.id.disconnectBtn);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.home);
         staticColorButton = findViewById(R.id.staticColorBtn);
         brightnessSeekBar.setMax(maxSeekBarValue - minSeekBarValue);
-        setUIEnabled(false);
         statusText = findViewById(R.id.statusText);
         statusText.setText(R.string.default_statusText);
     }
@@ -254,9 +247,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Brightness sent: " + finalProgress);
         }, 100);
     }
-    public void setUIEnabled(boolean enabled) {
-        disconnectButton.setEnabled(enabled);
-    }
 
     @Override
     protected void onDestroy() {
@@ -278,7 +268,6 @@ public class MainActivity extends AppCompatActivity {
         if(deviceName == null) deviceName = ConnectedDeviceManager.getInstance().getDeviceName();
         isConnected = ConnectedDeviceManager.getInstance().isConnected();
         Log.d(TAG, "ConnectionStateManager isConnected: " + isConnected);
-        setUIEnabled(isConnected);
         if(isConnected){
             statusText.setText("Connected to: " + deviceName);
         }
@@ -302,16 +291,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-    private void disconnectDevice() {
-        if(isConnected) {
-            //stop service
-            stopService(new Intent(this, BLEService.class));
-            //disable UI
-            setUIEnabled(false);
-            Toast.makeText(this, R.string.disconnected, Toast.LENGTH_SHORT).show();
-            statusText.setText(R.string.default_statusText);
-        } else {
-            Toast.makeText(this, R.string.handleCommand, Toast.LENGTH_SHORT).show();
-        }
-    }
 }

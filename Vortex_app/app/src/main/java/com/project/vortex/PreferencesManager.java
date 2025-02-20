@@ -3,11 +3,9 @@ package com.project.vortex;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,21 +13,18 @@ public class PreferencesManager {
     private static final String TAG = "PreferencesManager";
     private static final String PREF_NAME = "DiscoveredAndApprovedDevices";
     private static final String DEVICES_KEY = "savedDevicesArray";
-
     private static PreferencesManager instance;
     private final SharedPreferences sharedPreferences;
 
     private PreferencesManager(Context context) {
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
-
     public static PreferencesManager getInstance(Context context) {
         if (instance == null) {
             instance = new PreferencesManager(context.getApplicationContext());
         }
         return instance;
     }
-
     // Save a device to SharedPreferences
     public void saveDevice(String address, String name, boolean hasCharacteristic, String status) {
         Log.d(TAG, "Saving device: " + name + " with address: " + address + " and status: " + status + " and hasCharacteristic: " + hasCharacteristic);
@@ -63,7 +58,6 @@ public class PreferencesManager {
             Log.e(TAG, "Error saving device: " + e.getMessage());
         }
     }
-
     // Load all devices from SharedPreferences
     public List<JSONObject> loadDevices() {
         List<JSONObject> deviceList = new ArrayList<>();
@@ -78,7 +72,6 @@ public class PreferencesManager {
         }
         return deviceList;
     }
-
     // Remove a specific device
     public void removeDevice(String address) {
         try {
@@ -97,7 +90,6 @@ public class PreferencesManager {
             Log.e(TAG, "Error removing device: " + e.getMessage());
         }
     }
-
     // Clear all saved devices
     public void clearDevices() {
         sharedPreferences.edit().remove(DEVICES_KEY).apply();
@@ -118,7 +110,6 @@ public class PreferencesManager {
         }
         return "Disconnected";
     }
-
     public String getDeviceName(String address) {
         try {
             String existingJson = sharedPreferences.getString(DEVICES_KEY, "[]");
@@ -135,7 +126,6 @@ public class PreferencesManager {
         }
         return "Unknown"; // Fallback if device is not found
     }
-
     public void setDeviceStatus(String address, String newStatus) {
         try {
             String existingJson = sharedPreferences.getString(DEVICES_KEY, "[]");
@@ -156,7 +146,6 @@ public class PreferencesManager {
         }
 
     }
-
     public boolean getDeviceCharFlag(String address) {
         try {
             String existingJson = sharedPreferences.getString(DEVICES_KEY, "[]");

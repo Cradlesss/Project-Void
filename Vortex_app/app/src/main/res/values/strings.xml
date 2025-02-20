@@ -4,7 +4,8 @@
     <string name="app_name">Project Void</string>
 
     <!-- Default Values -->
-    <string name="coming_soon">Coming Soon</string>
+    <string name="coming_soon">This function is not yet supported</string>
+
     <!-- Bluetooth -->
     <string name="updateUIBasedOnConnectionState">Device not connected. Some features are disabled.</string>
     <string name="handleCommand">Connect To a Device First</string>
@@ -28,6 +29,11 @@
     <!-- Main Activity -->
     <string name="default_statusText">Connect to a device</string>
     <string name="scanning_for_devices_statusText">Scanning for devices...</string>
+    <string name="headerTitle">Desk LEDs Controller</string>
+    <string name="select_device_button">Select Device</string>
+    <string name="animationsButton">Animations</string>
+    <string name="static_color_button">Static Color</string>
+    <string name="device_not_connected">Connect to a device</string>
 
     <!-- Navigation Menu -->
     <string name="settings">Settings</string>
@@ -46,14 +52,21 @@
     <string name="invalid_hex_color">Invalid hex color!</string>
     <string name="color_applied">Color Applied</string>
     <string name="no_color_saved">No color saved yet!</string>
+    <string name="static_color_activity_title">Static Color</string>
+    <string name="r_value">R: 0</string>
+    <string name="g_value">G: 0</string>
+    <string name="b_value">B: 0</string>
 
     <!-- Select Device Activity -->
+    <string name="scan_button">Scan</string>
+    <string name="activity_select_device_title">Bluetooth</string>
 
     <!-- Device List Item -->
     <string name="default_device_status">Error</string>
     <string name="default_device_name">Device Name</string>
 
     <!-- Animations Activity -->
+    <string name="animations_title">Animations</string>
     <string name="off_btn">OFF</string>
     <string name="twinkle_btn">Twinkle</string>
     <string name="jinx_btn">Nebula Surge</string>
@@ -79,6 +92,21 @@
     <string name="rename_device">Rename Device</string>
     <string name="enter_device_name">Enter Device Name</string>
     <string name="device_name">Device Name</string>
+
+    <!-- Burger Menu -->
+    <string name="refresh_device_list_text">Remove All Saved Devices</string>
+    <string name="brightness_seekBar_text">Brightness</string>
+
+    <!-- Device Settings -->
+    <string name="device_name_Title">Device Name</string>
+    <string name="rename_button">Rename</string>
+    <string name="connect_button">Connect</string>
+    <string name="forget_button">Forget</string>
+    <string name="device_settings_tile">Device Settings</string>
+    <string name="dialog_rename_title">Rename Device</string>
+    <string name="dialog_rename_editText_default">Enter New Name</string>
+    <string name="dialog_rename_cancel_button">Cancel</string>
+    <string name="dialog_rename_positive_button">Rename</string>
 
 
 </resources>

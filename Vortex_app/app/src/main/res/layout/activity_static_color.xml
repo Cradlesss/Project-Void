@@ -3,9 +3,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor">
+    android:background="@color/backgroundColor"
+    android:paddingTop="16dp">
 
-    <!-- Brightness Container -->
+    <!-- Device Settings Tile -->
+    <TextView
+        android:id="@+id/device_settings_tile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/static_color_activity_title"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/AccentColor"
+        android:textAlignment="center"
+        android:paddingTop="5dp"
+        android:layout_toEndOf="@+id/back_button_frame"
+        android:layout_alignTop="@id/back_button_frame"
+        android:layout_alignBottom="@id/back_button_frame"/>
+
+    <!-- Back Button -->
+    <FrameLayout
+        android:id="@+id/back_button_frame"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/on_click_button_effect"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="8dp"
+        android:layout_gravity="center">
+
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_go_back"
+            android:contentDescription="@string/device_icon_desc"/>
+    </FrameLayout>
+
+    <!-- Container -->
     <LinearLayout
         android:id="@+id/brightnessContainer"
         android:layout_width="match_parent"
@@ -17,31 +54,73 @@
         android:padding="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/back_button_frame">
 
-        <!-- Predefined Colors Section -->
-        <TextView
-            android:id="@+id/predefined_colors_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="@string/predefined_colors_label"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/AccentColor"/>
 
-        <GridLayout
-            android:id="@+id/predefined_colors_grid"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="3"
-            android:rowCount="2"
-            android:padding="8dp"
-            android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/SecondaryColor">
+            android:layout_height="200dp">
 
-            <!-- Buttons for predefined colors will be added programmatically -->
-        </GridLayout>
+            <!-- Color wheel -->
+            <com.skydoves.colorpickerview.ColorPickerView
+                android:id="@+id/colorPickerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!-- RGB values container aligned at bottom left -->
+            <LinearLayout
+                android:id="@+id/rgbContainer"
+                android:layout_width="50dp"
+                android:layout_height="60dp"
+                android:layout_gravity="bottom"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <!-- Order: R at top, G in the middle, B at bottom -->
+                <TextView
+                    android:id="@+id/r_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/Red"
+                    android:gravity="bottom"
+                    android:text="@string/r_value"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/g_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@color/Green"
+                    android:gravity="bottom"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/g_value"
+                    android:textColor="@color/SecondaryColor"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/b_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@color/Blue"
+                    android:gravity="bottom"
+                    android:text="@string/b_value"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </FrameLayout>
+
+
+
+
 
         <!-- Saved Colors Section -->
         <TextView

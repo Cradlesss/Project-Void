@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/refresh_device_list"
+        android:title="@string/refresh_device_list_text"/>
+    <item
+        android:id="@+id/menu_advanced_settings"
+        android:title="Advanced Settings"/>
+</menu>

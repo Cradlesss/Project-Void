@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    android:background="?android:attr/selectableItemBackground"
+    android:background="@drawable/on_click_button_effect"
     android:clickable="true"
     android:focusable="true"
     android:onClick="onDeviceClicked">
@@ -48,8 +48,6 @@
             android:textSize="14sp"
             android:textColor="@color/primaryTextColor" />
     </LinearLayout>
-
-    <!-- Separator line -->
     
     <!-- Pair/Disconnect Button -->
     <ImageButton
@@ -60,8 +58,9 @@
         android:layout_centerVertical="true"
         android:src="@drawable/ic_settings"
         android:background="?android:attr/selectableItemBackground"
-        android:focusable="false"
+        android:contentDescription="@string/device_icon_desc"
         android:clickable="true"
+        android:focusable="false"
         android:padding="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
@@ -73,5 +72,6 @@
         android:layout_height="1dp"
         android:layout_below="@id/device_icon"
         android:layout_marginTop="16dp"
-        android:background="@color/backgroundColor"/>
+        android:background="@color/backgroundColor"
+        android:visibility="gone"/>
 </RelativeLayout>
