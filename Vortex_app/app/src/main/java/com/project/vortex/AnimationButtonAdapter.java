@@ -33,9 +33,17 @@ public class AnimationButtonAdapter extends RecyclerView.Adapter<AnimationButton
         int actualPosition = position % animationItems.size();
         AnimationItem item = animationItems.get(actualPosition);
         holder.bind(item, actualPosition);
+        holder.itemView.setTranslationY(0);
+
         if(actualPosition == selectedPosition){
             holder.button.setAlpha(1.0f);
             holder.button.setEnabled(true);
+            if(position == 0){
+                float extraTranslation = holder.itemView.getContext()
+                        .getResources()
+                        .getDimension(R.dimen.first_item_extra_translation);
+                holder.itemView.setTranslationY(extraTranslation);
+            }
         } else {
             holder.button.setAlpha(0.3f);
             holder.button.setEnabled(false);

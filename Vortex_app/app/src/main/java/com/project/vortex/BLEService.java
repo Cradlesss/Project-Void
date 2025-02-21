@@ -517,4 +517,5 @@ TODO:
    21. fix jinx and transition with break animations and enable the buttons(done)
    22. fix how the device saving works and check where address is set to null (done probably)
    23. Add a way or a method to stop the BLEService (done)
+   24. Make the buttons in RecycleView get smaller faster
  */

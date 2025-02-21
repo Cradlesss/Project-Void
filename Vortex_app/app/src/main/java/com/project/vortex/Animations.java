@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.Arrays;
@@ -25,7 +26,7 @@ public class Animations extends AppCompatActivity {
     private static final String TAG = "Animations";
     private boolean isConnected = false; // Tracks connection state
     private  AnimationButtonAdapter adapter;
-    private AggressiveSnapHelper snapHelper;
+    private CustomSnapHelper snapHelper;
     BottomNavigationView bottomNavigationView;
     ImageButton backButton;
     FrameLayout backButtonFrame;
@@ -146,14 +147,32 @@ public class Animations extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(null);
 
-        recyclerView.getViewTreeObserver().addOnPreDrawListener(() -> {
-            updateChildTransforms(recyclerView);
-            return true;
-        });
-
-
-        snapHelper = new AggressiveSnapHelper();
+        int offset = getResources().getDimensionPixelOffset(R.dimen.selection_offset);
+        snapHelper = new CustomSnapHelper(offset);
         snapHelper.attachToRecyclerView(recyclerView);
+
+        View selectionOverlay = findViewById(R.id.selection_overlay);
+
+        selectionOverlay.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                selectionOverlay.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int[] overlayLocation = new int[2];
+                selectionOverlay.getLocationOnScreen(overlayLocation);
+                int overlayCenterY = overlayLocation[1] + selectionOverlay.getHeight() / 2;
+
+                int[] recyclerLocation = new int[2];
+                recyclerView.getLocationOnScreen(recyclerLocation);
+                int recyclerCenterY = recyclerLocation[1] + recyclerView.getHeight() / 2;
+                int offset = recyclerCenterY - overlayCenterY;
+                Log.d("OffsetCalc","Offset: " + offset);
+
+                recyclerView.getViewTreeObserver().addOnPreDrawListener(() -> {
+                    updateChildTransforms(recyclerView, offset);
+                    return true;
+                });
+            }
+        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -163,9 +182,9 @@ public class Animations extends AppCompatActivity {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     View snapView = snapHelper.findSnapView(recyclerView.getLayoutManager());
                     if (snapView != null && recyclerView.getChildAdapterPosition(snapView) != RecyclerView.NO_POSITION) {
-                        int pos = recyclerView.getChildAdapterPosition(snapView);
-                        Log.d(TAG, "SCROLL_STATE_SETTLING Snapped to position: " + pos);
-                        adapter.setSelectedPosition(pos);
+                        int position = layoutManager.getPosition(snapView);
+                        Log.d(TAG, "Snapped to position: " + position);
+                        adapter.setSelectedPosition(position);
                     }
                 }
             }
@@ -177,20 +196,21 @@ public class Animations extends AppCompatActivity {
         backButtonFrame = findViewById(R.id.back_button_frame);
     }
 
-    private void updateChildTransforms(RecyclerView recyclerView) {
-        int recyclerCenterY = recyclerView.getHeight() / 2;
+    private void updateChildTransforms(RecyclerView recyclerView, int offset) {
+        // Instead of using recyclerView.getHeight()/2, adjust by subtracting the offset.
+        int effectiveCenterY = recyclerView.getHeight() / 2 - offset;
         for (int i = 0; i < recyclerView.getChildCount(); i++) {
             View child = recyclerView.getChildAt(i);
             int childTop = child.getTop();
             int childBottom = child.getBottom();
             int childCenterY = (childTop + childBottom) / 2;
-            float distanceFromCenter = Math.abs(recyclerCenterY - childCenterY);
-            float normalized = Math.min(distanceFromCenter / recyclerCenterY, 1f);
-            // Scale from 1.0 (center) down to 0.7 (edges)
+            float distanceFromCenter = Math.abs(effectiveCenterY - childCenterY);
+            float normalized = Math.min(distanceFromCenter / (float) effectiveCenterY, 1f);
+            // Scale: from 1.0 at the effective center down to 0.7 at the edges
             float scaleFactor = 1.0f - 0.3f * normalized;
             child.setScaleX(scaleFactor);
             child.setScaleY(scaleFactor);
-            // Dim from full opacity (center) down to 0.5 (edges)
+            // Alpha: from 1.0 at the center to 0.5 at the edges
             float alpha = 1.0f - 0.5f * normalized;
             child.setAlpha(alpha);
         }

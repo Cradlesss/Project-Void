@@ -58,8 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingTop="325dp"
-            android:paddingBottom="325dp"/>
+            android:paddingTop="235dp"
+            android:paddingBottom="425dp"/>
 
         <!-- Selection Overlay: a translucent gray band -->
         <View
@@ -67,8 +67,10 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_gravity="center_vertical"
-            android:alpha="0.2"
-            android:background="@color/primaryTextColor"/>
+            android:translationY="-70dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/selection_overlay_background" />
     </FrameLayout>
 
     <!-- Bottom Navigation -->
