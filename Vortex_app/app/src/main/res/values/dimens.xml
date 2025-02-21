@@ -2,4 +2,5 @@
 <resources>
     <dimen name="selection_offset">25dp</dimen>
     <dimen name="first_item_extra_translation">10dp</dimen>
+    <dimen name="item_height">60dp</dimen>
 </resources>
