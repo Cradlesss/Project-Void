@@ -1,6 +1,15 @@
 Updates to the app:
 
 21/02/2025
+Small fixes and redesign for RecyclerView:
+    Vortex_app:
+        - Replaced AggressiveSnapHelper with CustomSnapHelper.
+        - Made a small correction for the padding of the first item in RecyclerView.
+        - Renamed test_button_background_carousel to button_background_with_outline.
+        - Moved selection_overlay higher in Animations.
+        - Added dimens.xml resource.
+
+21/02/2025
 Major UI redesign for Animations and StaticColor, and minor redesign for all other activities:
     Vortex_app:
         - Now implementing:
