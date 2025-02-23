@@ -52,7 +52,6 @@
         android:visibility="gone"
         android:indeterminateTint="@color/AccentColor" />
 
-    <!-- Navigation Buttons -->
     <Button
         android:id="@+id/goToAnimations"
         android:layout_width="match_parent"

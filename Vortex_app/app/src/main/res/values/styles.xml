@@ -22,5 +22,9 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
+    <style name="Widget.App.MaterialDivider" parent="Widget.Material3.MaterialDivider">
+        <item name="dividerColor">@color/secondaryTextColor</item>
+    </style>
+
 
 </resources>

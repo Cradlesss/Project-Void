@@ -418,6 +418,8 @@ public class SelectDeviceActivity extends AppCompatActivity {
         deviceContainer.removeAllViews();
         // LayoutInflater for dynamically adding views
         LayoutInflater inflater = LayoutInflater.from(this);
+        int totalDevices = deviceList.size();
+        int index = 0;
 
         // Loop through deviceList to populate UI
         for (BluetoothDevice device : deviceList) {
@@ -426,6 +428,7 @@ public class SelectDeviceActivity extends AppCompatActivity {
             TextView deviceStatus = deviceView.findViewById(R.id.device_status);
             ImageButton settingsButton = deviceView.findViewById(R.id.settings_button);
             ImageView deviceIcon = deviceView.findViewById(R.id.device_icon);
+            View divider = deviceView.findViewById(R.id.divider_line);
 
             String address = device.getAddress();
             String status = PreferencesManager.getInstance(this).getDeviceStatus(address);
@@ -469,7 +472,16 @@ public class SelectDeviceActivity extends AppCompatActivity {
             });
 
             // Add the updated view to the container
+
+            if(divider != null){
+                if(index == totalDevices -1){
+                    divider.setVisibility(View.GONE);
+                } else {
+                    divider.setVisibility(View.VISIBLE);
+                }
+            }
             deviceContainer.addView(deviceView);
+            index++;
         }
     }
     private final ActivityResultLauncher<Intent> deviceSettingsLauncher =

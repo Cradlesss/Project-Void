@@ -57,15 +57,9 @@
         <activity android:name=".DeviceItemSettings"
             android:enabled="true"
             android:exported="false"/>
-
-        <!--Receiver -->
-        <receiver
-            android:name=".DeviceConnectionReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="isDeviceConnected" />
-            </intent-filter>
-        </receiver>
+        <activity android:name=".TestingNewActivities"
+            android:enabled="true"
+            android:exported="false"/>
 
     </application>
 </manifest>

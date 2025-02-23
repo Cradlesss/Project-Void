@@ -492,30 +492,3 @@ public class BLEService extends Service {
         return Connected;
     }
 }
-/*
-TODO:
-   1. update the ui when device connected (done) ~ the UI in ActivityMain doesn't update when back from ex animations (might be done (check for further errors)) (done)
-   2. notify user when device connected (done)
-   3. detect when device disconnects and notify user (done)
-   4. better UI (done)
-   5. selecting static colors not only animations (done)
-   6. Ideas for more features? ~ react to music?
-   7. Fix the laggy brightness and make it replay last sent animation or static color after user finished input (mostly done needs some minor fixes)
-   8. Disconnect button (done)
-   9. Update UI, Notification and StatusText when connection crashes (done)
-   10. Brightness accidentally sending bluetoothValue commands instead of brightness commands (done)
-   11. Disable buttons in StaticActivity when disconnected from device (done)
-   12. Rework UI in activity_select_device.xml (done)
-   13. Validate HEX input while user is typing not while sending (done)
-   14. new Icon Design & better app name (Project Void) ~ best one so far, (Project Synthwave) (VortexLink) (Project GhostLink)
-   15. buttons can be also set on timeout (to properly send commands) (done)
-   16. Fix updating deviceCharFlagMap in other activities (done)
-   17. check if app can connect to 2 devices at a time and what happens if yes (make the app disconnect from last connected device) (done)
-   18. Fix paired devices in selectDeviceActivity (done)
-   19. add a widget? or full cover screen widget?
-   20. fix notifications with higher api level (done)
-   21. fix jinx and transition with break animations and enable the buttons(done)
-   22. fix how the device saving works and check where address is set to null (done probably)
-   23. Add a way or a method to stop the BLEService (done)
-   24. Make the buttons in RecycleView get smaller faster
- */

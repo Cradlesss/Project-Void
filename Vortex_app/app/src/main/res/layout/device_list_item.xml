@@ -2,8 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/on_click_button_effect"
+    android:paddingEnd="8dp"
+    android:paddingTop="8dp"
+    android:paddingStart="8dp"
+    android:paddingBottom="8dp"
     android:clickable="true"
     android:focusable="true"
     android:onClick="onDeviceClicked">
@@ -60,18 +64,20 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/device_icon_desc"
         android:clickable="true"
-        android:focusable="false"
+        android:focusable="true"
         android:padding="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:scaleType="fitCenter"/>
 
     <View
-        android:id="@+id/bottom_separator"
-        android:layout_width="match_parent"
+        android:id="@+id/divider_line"
+        android:layout_width="wrap_content"
         android:layout_height="1dp"
-        android:layout_below="@id/device_icon"
+        android:layout_below="@+id/device_icon"
         android:layout_marginTop="16dp"
-        android:background="@color/backgroundColor"
-        android:visibility="gone"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/secondaryTextColor" />
+
 </RelativeLayout>

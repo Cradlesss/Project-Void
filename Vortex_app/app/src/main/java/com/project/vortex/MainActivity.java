@@ -79,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.settings) {
-                Toast.makeText(this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, TestingNewActivities.class);
+                startActivity(intent);
                 return false;
             } else if(itemId == R.id.static_color){
                 Intent intent = new Intent(this, StaticColorActivity.class);
