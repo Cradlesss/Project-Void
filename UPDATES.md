@@ -1,5 +1,12 @@
 Updates to the app:
 
+22/2/2025
+Release 22/2/2025:
+    Vortex_app:
+        - Created TestingNewActivities.class for testing new UI designs and app functionality;
+        - Added a divider line to items in SelectDeviceActivity;
+        - Added ic_device;
+
 21/02/2025
 Small fixes and redesign for RecyclerView:
     Vortex_app:
