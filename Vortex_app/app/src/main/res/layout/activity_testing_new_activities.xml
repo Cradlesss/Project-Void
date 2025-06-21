@@ -6,31 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
-    android:paddingEnd="16dp"
-    android:paddingStart="16dp"
-    android:paddingTop="16dp">
+    android:fitsSystemWindows="true">
 
-    <!-- Header Title on the left -->
+    <!-- Header Title -->
     <TextView
         android:id="@+id/headerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        android:textSize="24sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="@color/AccentColor"
+        android:layout_marginStart="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="24dp" />
 
-    <!-- FrameLayout for device selection button on the right -->
+    <!-- Select Device Button -->
     <FrameLayout
         android:id="@+id/selectDeviceFrame"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="@drawable/on_click_button_effect"
+        android:background="@drawable/button_background_with_outline"
         app:layout_constraintTop_toTopOf="@id/headerTitle"
         app:layout_constraintBottom_toBottomOf="@id/headerTitle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,15 +37,30 @@
 
         <ImageButton
             android:id="@+id/selectDeviceBtn"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="70dp"
+            android:layout_height="45dp"
             android:layout_gravity="center"
             android:contentDescription="@string/device_icon_desc"
             android:src="@drawable/ic_device"
             android:background="@null" />
     </FrameLayout>
 
-    <!-- Status Text below header -->
+    <!-- Select Device Button Label -->
+    <TextView
+        android:id="@+id/selectDeviceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_device"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/primaryTextColor"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@id/selectDeviceFrame"
+        app:layout_constraintStart_toStartOf="@id/selectDeviceFrame"
+        app:layout_constraintEnd_toEndOf="@id/selectDeviceFrame"
+        android:gravity="center" />
+
+    <!-- Status Text -->
     <TextView
         android:id="@+id/statusText"
         android:layout_width="wrap_content"
@@ -56,9 +70,9 @@
         android:textColor="@color/primaryTextColor"
         app:layout_constraintTop_toBottomOf="@id/headerTitle"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"/>
 
-    <!-- Buttons stacked vertically -->
     <LinearLayout
         android:id="@+id/buttonsContainer"
         android:layout_width="0dp"
@@ -67,7 +81,9 @@
         app:layout_constraintTop_toBottomOf="@id/statusText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
 
         <!-- Animations Button -->
         <Button
@@ -89,7 +105,61 @@
             android:background="@drawable/rounded_button" />
     </LinearLayout>
 
-    <!-- Brightness Container anchored above bottom nav -->
+    <!-- Central Preview Area -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/previewCard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/SecondaryColor"
+        app:layout_constraintTop_toBottomOf="@id/buttonsContainer"
+        app:layout_constraintBottom_toTopOf="@id/brightnessContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="H,1:1"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <!-- Device Preview -->
+            <ImageView
+                android:id="@+id/devicePreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_device_preview" />
+
+            <!-- Connection Status Indicator -->
+            <View
+                android:id="@+id/connectionIndicator"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:background="@drawable/ic_indicator_disconnected"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="8dp" />
+
+            <!-- Current Mode Text -->
+            <TextView
+                android:id="@+id/modeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DISCONNECTED"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Brightness -->
     <LinearLayout
         android:id="@+id/brightnessContainer"
         android:layout_width="0dp"
@@ -102,7 +172,10 @@
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp">
+        app:layout_constraintTop_toBottomOf="@id/previewCard"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
 
         <TextView
             android:id="@+id/brightnessLabel"
@@ -125,10 +198,10 @@
             android:progressTint="@color/AccentColor" />
     </LinearLayout>
 
-    <!-- Bottom Navigation (unchanged) -->
+    <!-- Bottom Navigation-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/SecondaryColor"
         app:menu="@menu/bottom_navigation_menu"

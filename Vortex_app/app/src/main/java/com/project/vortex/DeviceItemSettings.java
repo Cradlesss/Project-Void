@@ -17,9 +17,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class DeviceItemSettings extends AppCompatActivity {
@@ -45,6 +49,17 @@ public class DeviceItemSettings extends AppCompatActivity {
         deviceIcon = findViewById(R.id.device_icon);
         backButton = findViewById(R.id.back_button);
         backButtonFrame = findViewById(R.id.back_button_frame);
+        RelativeLayout root = findViewById(R.id.device_settings);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets i = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(
+                    i.left,
+                    i.top,
+                    i.right,
+                    i.bottom);
+            return insets;
+        });
 
         Intent intent = getIntent();
         if (intent != null) {

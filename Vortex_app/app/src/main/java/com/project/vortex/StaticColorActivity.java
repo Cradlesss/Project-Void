@@ -16,9 +16,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.skydoves.colorpickerview.ColorEnvelope;
 import com.skydoves.colorpickerview.ColorPickerView;
@@ -56,6 +62,16 @@ public class StaticColorActivity extends AppCompatActivity {
         rValue = findViewById(R.id.r_value);
         gValue = findViewById(R.id.g_value);
         bValue = findViewById(R.id.b_value);
+        RelativeLayout root = findViewById(R.id.static_color_activity);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets i = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            root.setPadding(
+                    i.left,
+                    i.top,
+                    i.right,
+                    v.getPaddingBottom());
+            return insets;
+        });
 
         setupColorWheel();
         setupHexInputWatcher();

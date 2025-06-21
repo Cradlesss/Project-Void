@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
-    android:paddingTop="16dp">
+    android:paddingTop="16dp"
+    android:id="@+id/static_color_activity">
 
     <!-- Device Settings Tile -->
     <TextView

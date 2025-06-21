@@ -192,7 +192,7 @@ void loop() {
     case BLUEB:
       beat();
       break;
-    case RAINBOW:
+    case RAINBOW: //something borken?
       RainbowBeat();
       break;
     case BEATR:

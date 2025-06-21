@@ -1,21 +1,64 @@
-<RelativeLayout
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor">
+    android:background="@color/backgroundColor"
+    android:fitsSystemWindows="true">
 
-    <!-- Header -->
+    <!-- Header Title -->
     <TextView
         android:id="@+id/headerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        android:textSize="24sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="@color/AccentColor"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Select Device Button -->
+    <FrameLayout
+        android:id="@+id/selectDeviceFrame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/button_background_with_outline"
+        app:layout_constraintTop_toTopOf="@id/headerTitle"
+        app:layout_constraintBottom_toBottomOf="@id/headerTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp">
+
+        <ImageButton
+            android:id="@+id/selectDeviceBtn"
+            android:layout_width="70dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/device_icon_desc"
+            android:src="@drawable/ic_device"
+            android:background="@null" />
+    </FrameLayout>
+
+    <!-- Select Device Button Label -->
+    <TextView
+        android:id="@+id/selectDeviceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_device"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/primaryTextColor"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@id/selectDeviceFrame"
+        app:layout_constraintStart_toStartOf="@id/selectDeviceFrame"
+        app:layout_constraintEnd_toEndOf="@id/selectDeviceFrame"
+        android:gravity="center" />
 
     <!-- Status Text -->
     <TextView
@@ -25,78 +68,70 @@
         android:text="@string/device_not_connected"
         android:textSize="16sp"
         android:textColor="@color/primaryTextColor"
-        android:layout_below="@id/headerTitle"
+        app:layout_constraintTop_toBottomOf="@id/headerTitle"
+        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"/>
 
-    <!-- Device Selection Button -->
-    <Button
-        android:id="@+id/selectDeviceBtn"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="@string/select_device_button"
-        android:textColor="@color/primaryTextColor"
-        android:background="@drawable/rounded_button"
-        android:layout_marginTop="16dp"
-        android:layout_below="@id/statusText"
-        android:layout_marginHorizontal="16dp" />
-
-    <!-- Progress Bar -->
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/buttonsContainer"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/selectDeviceBtn"
-        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/statusText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:visibility="gone"
-        android:indeterminateTint="@color/AccentColor" />
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
 
-    <Button
-        android:id="@+id/goToAnimations"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="@string/animationsButton"
-        android:textColor="@color/primaryTextColor"
-        android:background="@drawable/rounded_button"
-        android:layout_below="@id/selectDeviceBtn"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp" />
+        <!-- Animations Button -->
+        <Button
+            android:id="@+id/goToAnimations"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/animationsButton"
+            android:textColor="@color/primaryTextColor"
+            android:background="@drawable/rounded_button" />
 
-    <Button
-        android:id="@+id/staticColorBtn"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:text="@string/static_color_button"
-        android:textColor="@color/primaryTextColor"
-        android:background="@drawable/rounded_button"
-        android:layout_below="@id/goToAnimations"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp" />
+        <!-- Static Color Button -->
+        <Button
+            android:id="@+id/staticColorBtn"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="@string/static_color_button"
+            android:textColor="@color/primaryTextColor"
+            android:background="@drawable/rounded_button" />
+    </LinearLayout>
 
-    <!-- SeekBar for Brightness -->
+
+    <!-- Brightness -->
     <LinearLayout
         android:id="@+id/brightnessContainer"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_above="@id/bottomNavigation"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/rounded_background"
-        android:backgroundTint="@color/SecondaryColor"
         android:orientation="vertical"
         android:padding="12dp"
-        android:elevation="8dp">
+        android:background="@drawable/rounded_background"
+        android:backgroundTint="@color/SecondaryColor"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
 
         <TextView
             android:id="@+id/brightnessLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:text="@string/brightness_seekBar_text"
             android:textColor="@color/primaryTextColor"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
 
         <SeekBar
             android:id="@+id/brightnessSeekBar"
@@ -106,17 +141,21 @@
             android:valueFrom="48"
             android:valueTo="60"
             android:thumbTint="@color/AccentColor"
-            android:progressTint="@color/AccentColor"/>
+            android:progressTint="@color/AccentColor" />
     </LinearLayout>
 
-    <!-- Bottom Navigation -->
+    <!-- Bottom Navigation-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/SecondaryColor"
-        android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation_menu"
         app:itemIconTint="@color/AccentColor"
-        app:itemTextColor="@color/primaryTextColor" />
-</RelativeLayout>
+        app:itemTextColor="@color/primaryTextColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/backgroundColor"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:id="@+id/device_settings">
 
     <!-- Device Settings Tile -->
     <TextView

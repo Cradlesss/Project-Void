@@ -7,19 +7,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.internal.ViewUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
     // BLE
     private BluetoothAdapter bluetoothAdapter;
     // UI
-    private Button selectDeviceButton, openAnimationsButton, staticColorButton;
+    private Button openAnimationsButton, staticColorButton;
+    private ImageButton selectDeviceButton;
+    private FrameLayout selectDeviceFrame;
     private TextView statusText;
     private SeekBar brightnessSeekBar;
     private BottomNavigationView bottomNavigationView;
@@ -49,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //Initializing BroadcastReceivers
         LocalBroadcastManager.getInstance(this).registerReceiver(bleStatusReceiver,
@@ -69,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, StaticColorActivity.class);
             startActivity(intent);
         });
+
         //Navigation bar
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -79,8 +95,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.settings) {
-                Intent intent = new Intent(this, TestingNewActivities.class);
-                startActivity(intent);
+                Toast.makeText(MainActivity.this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(this, TestingNewActivities.class);
+//                startActivity(intent);
                 return false;
             } else if(itemId == R.id.static_color){
                 Intent intent = new Intent(this, StaticColorActivity.class);
@@ -145,13 +162,36 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         // Button listeners
-        selectDeviceButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SelectDeviceActivity.class);
-            startActivity(intent);
-        });
+        View.OnClickListener sharedBackListener = v -> {
+            Log.d(TAG, "Back button clicked");
+            int centerX = selectDeviceFrame.getWidth() / 2;
+            int centerY = selectDeviceFrame.getHeight() / 2;
+            selectDeviceFrame.setPressed(true);
+            Drawable foreground = selectDeviceFrame.getForeground();
+            if(foreground instanceof RippleDrawable){
+                (foreground).setHotspot(centerX, centerY);
+            }
+            selectDeviceFrame.postDelayed(() -> {
+                selectDeviceFrame.setPressed(false);
+                Intent intent = new Intent(this, SelectDeviceActivity.class);
+                startActivity(intent);
+            }, 200);
+        };
+        selectDeviceButton.setOnClickListener(sharedBackListener);
+        selectDeviceFrame.setOnClickListener(sharedBackListener);
     }
     private void registerUI(){
-        selectDeviceButton = findViewById(R.id.selectDeviceBtn);
+        ConstraintLayout root = findViewById(R.id.mainContainer);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets i = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(
+                    i.left,
+                    i.top,
+                    i.right,
+                    v.getPaddingBottom());
+            return insets;
+        });
+
         openAnimationsButton = findViewById(R.id.goToAnimations);
         brightnessSeekBar = findViewById(R.id.brightnessSeekBar);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
@@ -160,6 +200,8 @@ public class MainActivity extends AppCompatActivity {
         brightnessSeekBar.setMax(maxSeekBarValue - minSeekBarValue);
         statusText = findViewById(R.id.statusText);
         statusText.setText(R.string.default_statusText);
+        selectDeviceFrame = findViewById(R.id.selectDeviceFrame);
+        selectDeviceButton = findViewById(R.id.selectDeviceBtn);
     }
 
     private boolean checkPermissions() {
@@ -210,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, permissions.toArray(new String[0]), PERMISSION_REQUEST_CODE);
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

@@ -15,6 +15,10 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -117,11 +121,22 @@ public class Animations extends AppCompatActivity {
     }
 
     private void InitializeUI() {
+        ConstraintLayout root = findViewById(R.id.animations_container);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets i = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(
+                    i.left,
+                    i.top,
+                    i.right,
+                    v.getPaddingBottom());
+            return insets;
+        });
+
         RecyclerView recyclerView = findViewById(R.id.recycler);
         List<AnimationItem> animationItems = Arrays.asList(
                 new AnimationItem("Off", 0),
                 new AnimationItem("Twinkle", 1),
-                new AnimationItem("Jinx", 2),
+                new AnimationItem("Nebula Surge", 2),
                 new AnimationItem("Transition Break", 3),
                 new AnimationItem("Blueb", 4),
                 new AnimationItem("Rainbow", 5),

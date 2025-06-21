@@ -6,9 +6,12 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+///Scraped for now
 
 public class TestingNewActivities extends AppCompatActivity {
 
@@ -25,6 +29,8 @@ public class TestingNewActivities extends AppCompatActivity {
     private SeekBar brightnessSeekBar;
     private TextView statusText;
     private BottomNavigationView bottomNavigationView;
+    private int currentAnimation = 0;
+    private LEDStripPreviewView ledPreview;
     private String status;
     private String deviceName;
     private boolean isConnected = false;
@@ -40,6 +46,7 @@ public class TestingNewActivities extends AppCompatActivity {
         deviceName = ConnectedDeviceManager.getInstance().getDeviceName();
 
         registerUI();
+
         openAnimationsButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, Animations.class);
             startActivity(intent);
@@ -48,6 +55,32 @@ public class TestingNewActivities extends AppCompatActivity {
             Intent intent = new Intent(this, StaticColorActivity.class);
             startActivity(intent);
         });
+
+        ledPreview.setActiveAnimation(currentAnimation);
+        bottomNavigationView.setSelectedItemId(R.id.settings);
+
+        EditText editText = findViewById(R.id.animationHashtag);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence != null && charSequence.length() > 0){
+                int input = Integer.parseInt(charSequence.toString());
+                Log.d(TAG, "Input: " + input);
+                updateLEDPreview(input);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
@@ -69,7 +102,7 @@ public class TestingNewActivities extends AppCompatActivity {
         });
 
         View.OnClickListener sharedBackListener = v -> {
-            Log.d(TAG, "Back button clicked");
+            Log.d(TAG, "Select device button clicked");
             int centerX = selectDeviceFrame.getWidth() / 2;
             int centerY = selectDeviceFrame.getHeight() / 2;
             selectDeviceFrame.setPressed(true);
@@ -103,6 +136,12 @@ public class TestingNewActivities extends AppCompatActivity {
             }
         });
     }
+
+    private void updateLEDPreview(int newAnimation) {
+        currentAnimation = newAnimation;
+        ledPreview.setActiveAnimation(currentAnimation);
+    }
+
 
     @Override
     protected void onResume() {
@@ -139,6 +178,7 @@ public class TestingNewActivities extends AppCompatActivity {
         statusText.setText(R.string.default_statusText);
         selectDeviceFrame = findViewById(R.id.selectDeviceFrame);
         selectDeviceButton = findViewById(R.id.selectDeviceBtn);
+        ledPreview = findViewById(R.id.ledStripPreview);
     }
     private BroadcastReceiver bleStatusReceiver = new BroadcastReceiver(){
         @Override
