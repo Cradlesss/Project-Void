@@ -59,28 +59,28 @@ public class TestingNewActivities extends AppCompatActivity {
         ledPreview.setActiveAnimation(currentAnimation);
         bottomNavigationView.setSelectedItemId(R.id.settings);
 
-        EditText editText = findViewById(R.id.animationHashtag);
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence != null && charSequence.length() > 0){
-                int input = Integer.parseInt(charSequence.toString());
-                Log.d(TAG, "Input: " + input);
-                updateLEDPreview(input);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
+//        EditText editText = findViewById(R.id.animationHashtag);
+//        editText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                if (charSequence != null && charSequence.length() > 0){
+//                int input = Integer.parseInt(charSequence.toString());
+//                Log.d(TAG, "Input: " + input);
+//                updateLEDPreview(input);
+//                }
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//
+//            }
+//        });
+//
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
@@ -178,7 +178,7 @@ public class TestingNewActivities extends AppCompatActivity {
         statusText.setText(R.string.default_statusText);
         selectDeviceFrame = findViewById(R.id.selectDeviceFrame);
         selectDeviceButton = findViewById(R.id.selectDeviceBtn);
-        ledPreview = findViewById(R.id.ledStripPreview);
+//        ledPreview = findViewById(R.id.ledStripPreview);
     }
     private BroadcastReceiver bleStatusReceiver = new BroadcastReceiver(){
         @Override

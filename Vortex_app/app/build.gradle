@@ -35,8 +35,11 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
-    implementation "com.github.skydoves:colorpickerview:2.3.0"
-    implementation 'com.google.android.material:material:1.12.0'
-    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    implementation libs.colorpickerview
+//    implementation "com.github.skydoves:colorpickerview:2.3.0"
+    implementation libs.material
+    implementation libs.glide
+//    implementation libs.gravitysnaphelper
+    implementation libs.gravitysnaphelper.v222
 
 }

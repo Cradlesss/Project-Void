@@ -20,8 +20,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +30,7 @@ public class Animations extends AppCompatActivity {
     private static final String TAG = "Animations";
     private boolean isConnected = false; // Tracks connection state
     private  AnimationButtonAdapter adapter;
-    private CustomSnapHelper snapHelper;
+    private SnapHelper snapHelper;
     BottomNavigationView bottomNavigationView;
     ImageButton backButton;
     FrameLayout backButtonFrame;

@@ -1,5 +1,9 @@
 [versions]
 agp = "8.10.1"
+colorpickerview = "2.3.0"
+glide = "4.16.0"
+gravitysnaphelper = "1.2.0"
+gravitysnaphelperVersion = "2.2.2"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -7,6 +11,10 @@ appcompat = "1.7.0"
 material = "1.12.0"
 
 [libraries]
+colorpickerview = { module = "com.github.skydoves:colorpickerview", version.ref = "colorpickerview" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+gravitysnaphelper = { module = "com.github.rubensousa:gravitysnaphelper", version.ref = "gravitysnaphelper" }
+gravitysnaphelper-v222 = { module = "com.github.rubensousa:gravitysnaphelper", version.ref = "gravitysnaphelperVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
